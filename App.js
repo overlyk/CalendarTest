@@ -20,7 +20,7 @@ export default function App() {
     <Inputs />
    <HttpExample /> 
    <Surface style={styles3.surface} elevation={4}>
-     <Text>Surface</Text>
+     <Text>Surface2</Text>
   </Surface>
   <MyTextBox />
       <View style = {styles2.redbox} />
