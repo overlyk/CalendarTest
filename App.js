@@ -7,28 +7,12 @@ import { Surface, Text } from 'react-native-paper';
 import MyTextBox from './components/MyTextBox';
 import MyAppBar from './components/MyAppBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import MainMenu from './components/MainMenu';
 export default function App() {
   return (
     <SafeAreaProvider>
-      
-
-
-  <View>
-
-
-    <Inputs />
-   <HttpExample /> 
-   <Surface style={styles3.surface} elevation={4}>
-     <Text>Surface2</Text>
-  </Surface>
-  <MyTextBox />
-      <View style = {styles2.redbox} />
-      <View style = {styles2.bluebox} />
-      <View style = {styles2.blackbox} />
-
- </View>
- </SafeAreaProvider>
+        <MyAppBar />
+    </SafeAreaProvider>
   );
 }
 
@@ -40,7 +24,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   }
  })
-
  const styles2 = StyleSheet.create ({
   container: {
      flexDirection: 'column',

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
+import { parseJsonText } from 'typescript';
 
 class HttpExample extends Component {
    state = {
@@ -11,6 +12,7 @@ class HttpExample extends Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
+         
          console.log(responseJson);
          this.setState({
             data: responseJson
@@ -24,7 +26,7 @@ class HttpExample extends Component {
       return (
          <View>
             <Text>
-               {this.state.data.body}
+               {}
             </Text>
          </View>
       )

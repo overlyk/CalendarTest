@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Modal, Portal, Text, Button, View, PaperProvider } from 'react-native-paper';
+import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
+import { View } from 'react-native';
 
 const PopUp = () => {
   const [visible, setVisible] = React.useState(false);

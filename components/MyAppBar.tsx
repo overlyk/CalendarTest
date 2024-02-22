@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { BottomNavigation, Text } from 'react-native-paper';
+import SecondMenu from './SecondMenu';
+import MainMenu from './MainMenu';
+import { SafeAreaView } from 'react-native-safe-area-context';
+const MusicRoute = () => <MainMenu />;
 
-const MusicRoute = () => <Text>Music</Text>;
-
-const AlbumsRoute = () => <Text>Albums</Text>;
+const AlbumsRoute = () => <SecondMenu />;
 
 const RecentsRoute = () => <Text>Recents</Text>;
 
@@ -26,11 +28,12 @@ const MyAppBar = () => {
   });
 
   return (
-    <BottomNavigation
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-    />
+        <BottomNavigation
+          navigationState={{ index, routes }}
+          onIndexChange={setIndex}
+          renderScene={renderScene}
+        />
+
   );
 };
 
