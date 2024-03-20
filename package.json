@@ -6,12 +6,15 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "prettier-format": "prettier --config .prettierrc 'components/*.tsx' --write"
   },
   "dependencies": {
     "@types/react": "~18.2.45",
+    "eslint": "^8.57.0",
     "expo": "~50.0.7",
     "expo-status-bar": "~1.11.1",
+    "prettier": "^3.2.5",
     "react": "18.2.0",
     "react-native": "0.73.4",
     "react-native-paper": "^5.12.3",

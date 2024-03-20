@@ -1,13 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+
 import React, { Component } from 'react'
-import Inputs from './components/Inputs';
-import HttpExample from './components/HttpExample';
-import { Surface, Text } from 'react-native-paper';
-import MyTextBox from './components/MyTextBox';
 import MyAppBar from './components/MyAppBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import MainMenu from './components/MainMenu';
+import { StyleSheet, View, Text } from 'react-native';
+import { Surface } from 'react-native-paper';
+
 export default function App() {
   return (
     <SafeAreaProvider>

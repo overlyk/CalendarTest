@@ -10,23 +10,18 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function MainMenu() {
   return (
-      
-
-<View>
-
-
-<Inputs />
-<HttpExample /> 
-<Surface style={styles3.surface} elevation={4}>
- <Text>Surface2</Text>
-</Surface>
-<MyTextBox />
-  <View style = {styles2.redbox} />
-  <View style = {styles2.bluebox} />
-  <View style = {styles2.blackbox} />
-
-</View>
-);
+    <View>
+      <Inputs />
+      <HttpExample />
+      <Surface style={styles3.surface} elevation={4}>
+        <Text>Surface2</Text>
+      </Surface>
+      <MyTextBox />
+      <View style={styles2.redbox} />
+      <View style={styles2.bluebox} />
+      <View style={styles2.blackbox} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -37,7 +32,6 @@ alignItems: 'center',
 justifyContent: 'center',
 }
 })
-
 const styles2 = StyleSheet.create ({
 container: {
  flexDirection: 'column',
