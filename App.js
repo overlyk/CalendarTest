@@ -1,14 +1,29 @@
-
-import React, { Component } from 'react'
-import MyAppBar from './components/MyAppBar';
+import BottomNavBar from './src/components/BottomNavBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StyleSheet, View, Text } from 'react-native';
-import { Surface } from 'react-native-paper';
+import React from 'react';
+import { useState } from 'react';
+import Login from './src/pages/Login';
 
+
+//entry point of the application - equivalent to the main function
+//calls AppBar which is bottom nav component responsible for keeping track of routing to different pages
+//calls "login" component which user logs/in out
 export default function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleLogin = (status) => {
+    setLoggedIn(status);
+  };
+
+  //if logged in, show bottomnavbar and route to main page - if not, show login page
   return (
     <SafeAreaProvider>
-        <MyAppBar />
+        {loggedIn 
+        ? 
+        <BottomNavBar /> 
+        : 
+        <Login handleLogin={handleLogin}/>}
     </SafeAreaProvider>
   );
 }

@@ -1,3 +1,4 @@
+//this is an example of a modal popup in react native
 import * as React from 'react';
 import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
 import { View } from 'react-native';

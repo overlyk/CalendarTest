@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { Component } from 'react'
-import Inputs from './Inputs';
-import HttpExample from './HttpExample';
+import Inputs from '../components/Inputs';
+import HttpExample from '../components/ApiExample';
 import { Surface, Text } from 'react-native-paper';
-import MyTextBox from './MyTextBox';
-import MyAppBar from './MyAppBar';
+import MyTextBox from '../components/MyTextBox';
+import MyAppBar from '../components/BottomNavBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function MainMenu() {
@@ -16,7 +16,7 @@ export default function MainMenu() {
       <Surface style={styles3.surface} elevation={4}>
         <Text>Surface2</Text>
       </Surface>
-      <MyTextBox />
+      <MyTextBox label="test custom label"/>
       <View style={styles2.redbox} />
       <View style={styles2.bluebox} />
       <View style={styles2.blackbox} />

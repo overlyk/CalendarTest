@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { TextInput } from 'react-native-paper';
 
-const MyTextBox = () => {
+const MyTextBox = ({ label } : { label: string }) => {
   const [text, setText] = React.useState("");
 
   return (
     <TextInput
-      label="Email"
+      label={label}
       value={text}
       onChangeText={text => setText(text)}
     />
