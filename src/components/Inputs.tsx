@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 
+//this is a class based component
 class Inputs extends Component {
    state = {
       email: '',

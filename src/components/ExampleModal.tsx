@@ -3,9 +3,8 @@ import * as React from 'react';
 import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
 import { View } from 'react-native';
 
-const PopUp = () => {
+export default function PopUp() {
   const [visible, setVisible] = React.useState(false);
-
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = {backgroundColor: 'white', padding: 0};
@@ -23,5 +22,3 @@ const PopUp = () => {
     </View>
   );
 };
-
-export default PopUp;

@@ -8,13 +8,13 @@ import MyTextBox from '../components/MyTextBox';
 import MyAppBar from '../components/BottomNavBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function MainMenu() {
+export default function Home() {
   return (
     <View>
       <Inputs />
       <HttpExample />
       <Surface style={styles3.surface} elevation={4}>
-        <Text>Surface2</Text>
+        <Text>this is the home screen with some test elements</Text>
       </Surface>
       <MyTextBox label="test custom label"/>
       <View style={styles2.redbox} />

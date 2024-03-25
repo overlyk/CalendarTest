@@ -11,17 +11,18 @@ import MyTextBox from '../components/MyTextBox';
 import MyAppBar from '../components/BottomNavBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function SecondMenu() {
+export default function Goals() {
   return (
 <View>
   <View style = {styles2.bluebox} />
   <View style = {styles2.bluebox} />
   <View style = {styles2.bluebox} />
-  <Text>This is the 2nd Screen</Text>
+  <Text>This is the Goals screen for UI elements related to goals</Text>
 </View>
 );
 }
 
+//test stylesheets - fine to delete
 const styles = StyleSheet.create({
 container: {
 flex: 1,
@@ -30,7 +31,6 @@ alignItems: 'center',
 justifyContent: 'center',
 }
 })
-
 const styles2 = StyleSheet.create ({
 container: {
  flexDirection: 'column',

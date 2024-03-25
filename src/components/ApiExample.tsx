@@ -14,7 +14,7 @@ export default function HttpExample() {
 
 useEffect(() => {
   const fetchData = async () => {
-      const userData = await getUser();
+      const userData = await getUser(1);
       if (userData) {
           setUser(userData);
           setLoading(false);

@@ -7,10 +7,10 @@ import { getUser } from '../api/logic/UserLogic';
 import { User } from '../api/models/User';
 import { TextInput } from 'react-native-paper';
 
-export default function Login() {
+export default function Calendar() {
 
     return (
-       <Text>calendar stuff here</Text>
+       <Text>calendar screen UI elements go in this place</Text>
     );
 }
 

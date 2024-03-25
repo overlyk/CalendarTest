@@ -3,39 +3,51 @@ import React, { useEffect, useState } from 'react';
 
 import { View, Text, Button, ActivityIndicator, StyleSheet, TouchableOpacity  } from 'react-native';
 import Inputs from '../components/Inputs';
-import { getUser } from '../api/logic/UserLogic';
+import { getUser, createUser, getAllUsers, loginUser } from '../api/logic/UserLogic';
 import { User } from '../api/models/User';
 import { TextInput } from 'react-native-paper';
 
 export default function Login( { handleLogin } : { handleLogin: (status: boolean) => boolean }) {
-    const [user, setUser] = useState({} as User);
+    const [currentUser, setUser] = useState({} as User);
     const [inputUsername, setInputUsername] = useState('');
     const [inputPassword, setInputPassword] = useState('');
     const [isLoading, setLoading] = useState(true);
+    const allUsers  = getAllUsers();
 
-    useEffect(() => {
-      const fetchData = async () => {
-          const userData = await getUser();
-          if (userData) {
-              setUser(userData);
-              setLoading(false);
-          }
-          else {
-            setLoading(true);
-          }
-      };
-      fetchData();
-    }, []);
+   //  useEffect(() => {
+   //    const fetchData = async () => {
+   //        const userData = await getUser();
+   //        if (userData) {
+   //            setUser(userData);
+   //            setLoading(false);
+   //        }
+   //        else {
+   //          setLoading(true);
+   //        }
+   //    };
+   //    fetchData();
+   //  }, []);
 
-    const authenticateUser = () => {
-        if (user.Name === inputUsername && user.Password === inputPassword) 
+    const authenticateUser = async () => {
+      const user = await loginUser(inputUsername, inputPassword);
+        if (user) 
         {
             console.log('Login successful');
+            setUser(user);
             handleLogin(true);
         } else {
             console.log('Login failed');
             handleLogin(false);
         }
+    };
+
+    const handleCreateUser = () => {
+      newUser({id: 0, Name: inputUsername, Password: inputPassword});
+   }
+    const newUser = (user: User) => {
+         console.log('New User');
+         createUser(user);
+         handleLogin(false);
     };
 
     return (
@@ -60,6 +72,14 @@ export default function Login( { handleLogin } : { handleLogin: (status: boolean
                  onPress = {authenticateUser}>
                  <Text style = {styles.submitButtonText}> Submit </Text>
               </TouchableOpacity>
+
+              <TouchableOpacity
+                 style = {styles.submitButton}
+                 onPress = {handleCreateUser}>
+                 <Text style = {styles.submitButtonText}> New User? </Text>
+              </TouchableOpacity>
+
+
     </View>
     );
 }
