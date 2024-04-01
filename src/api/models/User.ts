@@ -1,6 +1,10 @@
 // Purpose: Model for User object.
 export interface User {
     id: number;
-    Name: string;
-    Password: string;
+    username: string;
+    password: string;
+    firstname: string;
+    lastname: string;
+    TeamId: number | null;
+    isCoach: boolean;
 }

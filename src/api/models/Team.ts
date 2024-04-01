@@ -1,5 +1,6 @@
 export interface Team {
     id: number;
-    Sport: string;
-    CoachId: number;
+    sport: number;
+    coachid: number;
+    name: string;
 }

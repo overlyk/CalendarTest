@@ -15,13 +15,17 @@ export const getUser = async (userId: number): Promise<User | null> => {
         // Assuming the JSON directly contains the user properties
         const user: User = {
             id: json.id,
-            Name: json.Name,
-            Password: json.Password
+            username: json.username,
+            password: json.password,
+            firstname: json.firstname,
+            lastname: json.lastname,
+            TeamId: json.TeamId,
+            isCoach: json.isCoach
         };
 
         return user;
     } catch (error) {
-        console.error('error happened: ', error);
+        console.error(`error happened getting user with id ${userId}: `, error);
         return null;
     }
 };
@@ -41,13 +45,17 @@ export const getAllUsers = async (): Promise<User[] | null> => {
         const users: User[] = json.map((user: User) => {
             return {
                 id: user.id,
-                Name: user.Name,
-                Password: user.Password
+                username: user.username,
+                password: user.password,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                TeamId: user.TeamId,
+                isCoach: user.isCoach
             };
         });
         return users;
     } catch (error) {
-        console.error('error happened: ', error);
+        console.error('error happened getting all users: ', error);
         return null;
     }
 };
@@ -55,38 +63,68 @@ export const getAllUsers = async (): Promise<User[] | null> => {
 export const loginUser = async (username: string, password: string): Promise<User | null> => {
     try {
         const response = await fetch(variables.API_URL + '/api/User/login', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-        });
-        const json = await response.json();
-        const user: User = {
-            id: json.id,
-            Name: json.Name,
-            Password: json.Password
-        };
-
-        return user;
-    } catch (error) {
-        console.log('test login error '  + error);
-        console.error('error happened: ', error);
-        return null;
-    }
-
-}
-export const createUser = async (user: User): Promise<boolean> => {
-    try {
-        const response = await fetch(variables.API_URL + '/api/User', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
         });
-        console.log('test '  + response.ok);
+
+        // if (!response.ok) {
+        //     throw new Error('Network response was not ok');
+        // }
+
+        const json = await response.json();
+        const user: User = {
+            id: json.id,
+            username: json.username,
+            password: json.password,
+            firstname: json.firstname || "",
+            lastname: json.lastname || "",
+            TeamId: json.TeamId || null,
+            isCoach: json.isCoach || false
+        };
+        if (user.id > 0)
+        {
+            return user;
+        }
+        else
+        {
+            console.error('returned nothing: ', json);
+            return null;
+        }
+    } catch (error) {
+        console.log('test login error '  + error);
+        console.error('error happened: ', error);
+        return null;
+    }
+};
+export const createUser = async (user: User): Promise<boolean> => {
+    console.log('test '  + user.username + ' ' + user.password + ' ' + user.firstname + ' ' + user.lastname + ' ' + user.TeamId + ' ' + user.isCoach);
+    try {
+        const response = await fetch(variables.API_URL + '/api/User/test', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: 0,
+                username: user.username,
+                password: user.password,
+                firstname: "",
+                lastname: "",
+                TeamId: 0,
+                isCoach: 0
+            })
+        });
+        const json = await response.json();
+        console.log('test '  + response.url);
+        console.log('test '  + response.status);
         return response.ok;
     } catch (error) {
         console.log('test error '  + error);

@@ -1,8 +1,9 @@
 // Purpose: Model for User object.
 export interface Goal {
     id: number;
-    Name: string;
-    UserId: number;
+    userid: number;
+    name: string;
+    description: string;
     isCompleted: boolean;
-    TeamId: number;
+    teamid: number;
 }

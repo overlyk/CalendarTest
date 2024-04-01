@@ -18,7 +18,7 @@ export default function App() {
 
   //if logged in, show bottomnavbar and route to main page - if not, show login page
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider style={styles.container}>
         {loggedIn 
         ? 
         <BottomNavBar /> 
@@ -30,10 +30,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'lightgreen',
   }
  })
  const styles2 = StyleSheet.create ({
