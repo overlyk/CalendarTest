@@ -106,7 +106,7 @@ export const loginUser = async (username: string, password: string): Promise<Use
 export const createUser = async (user: User): Promise<boolean> => {
     console.log('test '  + user.username + ' ' + user.password + ' ' + user.firstname + ' ' + user.lastname + ' ' + user.TeamId + ' ' + user.isCoach);
     try {
-        const response = await fetch(variables.API_URL + '/api/User/test', {
+        const response = await fetch(variables.API_URL + '/api/User/user', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

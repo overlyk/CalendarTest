@@ -4,7 +4,7 @@ export interface Activity {
     name: string;
     description: string;
     starttime: string;
-    endttime: string;
+    endtime: string;
     userid: number;
     teamid: number;
     location: string;
