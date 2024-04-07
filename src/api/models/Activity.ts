@@ -3,8 +3,8 @@ export interface Activity {
     id: number;
     name: string;
     description: string;
-    starttime: string;
-    endtime: string;
+    starttime: Date;
+    endtime: Date;
     userid: number;
     teamid: number;
     location: string;

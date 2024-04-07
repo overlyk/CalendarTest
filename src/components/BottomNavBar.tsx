@@ -11,9 +11,9 @@ import Calendar from '../pages/Calendar';
 import Team from '../pages/Team';
 import { User } from '../api/models/User';
 
-export default function BottomNavBar({currentUser} : {currentUser: User} ) {
+export default function BottomNavBar({currentUser, handleLogout} : {currentUser: User, handleLogout: () => void} ) {
   const [index, setIndex] = React.useState(0);
-  const HomeRoute = () => <Home currentUser={currentUser}/>;
+  const HomeRoute = () => <Home currentUser={currentUser} handleLogout = {handleLogout}/>;
   const GoalsRoute = () => <Goals currentUser={currentUser}/>;
   const TeamRoute = () => <Team currentUser={currentUser}/>;
   const NotificationsRoute = () => <Calendar currentUser={currentUser}/>;

@@ -3,7 +3,7 @@
 
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import Inputs from '../components/Inputs';
 import HttpExample from '../components/ApiExample';
 import { Surface, Text } from 'react-native-paper';
@@ -11,14 +11,30 @@ import MyTextBox from '../components/MyTextBox';
 import MyAppBar from '../components/BottomNavBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { User } from '../api/models/User';
+import { getAllGoals } from '../api/logic/GoalLogic';
+import { Goal } from '../api/models/Goal';
 
 export default function Goals({currentUser} : {currentUser: User} ) {
+
+  const [userGoals, setUserGoals] = useState<Goal[]>([]);
+  useEffect(() => {
+    const fetchGoals = async () => {
+      const allGoals = await getAllGoals();
+      if (allGoals) {
+        const filteredGoals = allGoals.filter(goal => goal.userid === currentUser.id);
+        setUserGoals(filteredGoals);
+      }
+    };
+    fetchGoals();
+  }, [currentUser.id])
+
+
   return (
 <View>
   <View style = {styles2.bluebox} />
   <View style = {styles2.bluebox} />
   <View style = {styles2.bluebox} />
-  <Text>This is the Goals screen for UI elements related to goals</Text>
+  <Text>This is the Goals screen for UI elements related to goagfdgfdgfdgfls</Text>
 </View>
 );
 }

@@ -1,6 +1,6 @@
 import BottomNavBar from './src/components/BottomNavBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
 import React from 'react';
 import { useState } from 'react';
 import Login from './src/pages/Login';
@@ -20,16 +20,22 @@ export default function App() {
     }
   };
 
+  const handleLogout = () => {
+      setLoggedIn(false);
+  };
+
   //if logged in, show bottomnavbar and route to main page - if not, show login page
   return (
-    <SafeAreaProvider style={styles.container}>
+    <SafeAreaProvider>
       <Provider>
-        {loggedIn 
-        ? 
-        <BottomNavBar currentUser={currentUser} /> 
-        : 
-        <Login handleLogin={handleLogin}/>}
-        </Provider>
+        <SafeAreaView style={styles.container}>
+          {loggedIn 
+          ? 
+          <BottomNavBar currentUser={currentUser} handleLogout={handleLogout}/> 
+          : 
+          <Login handleLogin={handleLogin}/>}
+        </SafeAreaView>
+      </Provider>
     </SafeAreaProvider>
   );
 }
@@ -37,6 +43,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'lightgreen',
+    flex: 1,
   }
  })
  const styles2 = StyleSheet.create ({
