@@ -32,10 +32,9 @@ export default function App() {
           {loggedIn 
           ? 
           <View style={styles.appBar}>
-          <CustomAppBar />
-          <BottomNavBar currentUser={currentUser} handleLogout={handleLogout}/> 
+            <CustomAppBar />
+            <BottomNavBar currentUser={currentUser} handleLogout={handleLogout}/> 
           </View>
-
           : 
           <Login handleLogin={handleLogin}/>}
         </SafeAreaView>
