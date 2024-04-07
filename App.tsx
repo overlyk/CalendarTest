@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Login from './src/pages/Login';
 import { User } from './src/api/models/User';
 import { Provider } from 'react-native-paper';
-
+import CustomAppBar from './src/components/CustomAppBar';
 //entry point of the application - equivalent to the main function
 //calls AppBar which is bottom nav component responsible for keeping track of routing to different pages
 //calls "login" component which user logs/in out
@@ -31,7 +31,11 @@ export default function App() {
         <SafeAreaView style={styles.container}>
           {loggedIn 
           ? 
+          <View style={styles.appBar}>
+          <CustomAppBar />
           <BottomNavBar currentUser={currentUser} handleLogout={handleLogout}/> 
+          </View>
+
           : 
           <Login handleLogin={handleLogin}/>}
         </SafeAreaView>
@@ -42,6 +46,10 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'lightgreen',
+    flex: 1,
+  },
+  appBar: {
     backgroundColor: 'lightgreen',
     flex: 1,
   }
