@@ -10,8 +10,9 @@ import { Surface, Text } from 'react-native-paper';
 import MyTextBox from '../components/MyTextBox';
 import MyAppBar from '../components/BottomNavBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { User } from '../api/models/User';
 
-export default function Goals() {
+export default function Goals({currentUser} : {currentUser: User} ) {
   return (
 <View>
   <View style = {styles2.bluebox} />

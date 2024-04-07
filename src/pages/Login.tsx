@@ -6,62 +6,28 @@ import Inputs from '../components/Inputs';
 import { getUser, createUser, getAllUsers, loginUser } from '../api/logic/UserLogic';
 import { User } from '../api/models/User';
 import { Surface, TextInput } from 'react-native-paper';
-
-export default function Login( { handleLogin } : { handleLogin: (status: boolean) => boolean }) {
-    const [currentUser, setUser] = useState({} as User);
+import CreateUserModal from '../components/modals/CreateUserModal';
+export default function Login( { handleLogin } : { handleLogin: (user: User) => void}) {
+    const [showLoginModal, setShowLoginModal] = useState(false);
     const [inputUsername, setInputUsername] = useState('');
     const [inputPassword, setInputPassword] = useState('');
-    const [isLoading, setLoading] = useState(true);
-   //  const allUsers  = getAllUsers();
-
-   //  useEffect(() => {
-   //    const fetchData = async () => {
-   //        const userData = await getUser();
-   //        if (userData) {
-   //            setUser(userData);
-   //            setLoading(false);
-   //        }
-   //        else {
-   //          setLoading(true);
-   //        }
-   //    };
-   //    fetchData();
-   //  }, []);
-
+    //function to handle logging in user
     const authenticateUser = async () => {
       console.log(inputUsername, inputPassword);
-      const user = await loginUser(inputUsername, inputPassword);
+      const user = await loginUser(inputUsername, inputPassword); //calls API to see if user exists and authenticated
       console.log("user object returned as: " + user);
         if (user) 
         {
             console.log('Login successful');
-            setUser(user);
-            handleLogin(true);
+            handleLogin(user);
         } else {
             console.log('Login failed');
-            handleLogin(false);
         }
     };
-
-    const handleCreateUser = () => {
-      newUser({
-         id: 0,
-         username: inputUsername,
-         password: inputPassword,
-         firstname: '',
-         lastname: '',
-         isCoach: false,
-         TeamId: 0
-      });
-   }
-    const newUser = (user: User) => {
-         console.log('New User');
-         createUser(user);
-         handleLogin(false);
-    };
-
+    //this is what is displayed on the screen
     return (
      <View style = {styles.container}>
+         {showLoginModal ? <CreateUserModal handleModalClose={() => setShowLoginModal(false)} /> : null}
          <Surface>
                <Text style ={styles.titleText}>       PHEONIX FITNESS</Text>
                <TextInput style = {styles.input}
@@ -83,7 +49,7 @@ export default function Login( { handleLogin } : { handleLogin: (status: boolean
                </TouchableOpacity>
                <TouchableOpacity
                   style = {styles.submitButton}
-                  onPress = {handleCreateUser}>
+                  onPress = {() => setShowLoginModal(true)}>
                   <Text style = {styles.submitButtonText}>                                       Sign Up </Text>
                </TouchableOpacity>
 
@@ -91,7 +57,7 @@ export default function Login( { handleLogin } : { handleLogin: (status: boolean
     </View>
     );
 }
-
+//use these to style the components (similar to CSS)
 const styles = StyleSheet.create({
     container: {
        paddingTop: 220,

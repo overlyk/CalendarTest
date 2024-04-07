@@ -9,14 +9,15 @@ import Goals from '../pages/Goals';
 import Home from '../pages/Home';
 import Calendar from '../pages/Calendar';
 import Team from '../pages/Team';
+import { User } from '../api/models/User';
 
-const HomeRoute = () => <Home />;
-const GoalsRoute = () => <Goals />;
-const TeamRoute = () => <Team />;
-const NotificationsRoute = () => <Calendar />;
-
-export default function BottomNavBar() {
+export default function BottomNavBar({currentUser} : {currentUser: User} ) {
   const [index, setIndex] = React.useState(0);
+  const HomeRoute = () => <Home currentUser={currentUser}/>;
+  const GoalsRoute = () => <Goals currentUser={currentUser}/>;
+  const TeamRoute = () => <Team currentUser={currentUser}/>;
+  const NotificationsRoute = () => <Calendar currentUser={currentUser}/>;
+
   const [routes] = React.useState([
     { key: 'home', title: 'Home', focusedIcon: 'heart', unfocusedIcon: 'heart-outline'},
     { key: 'goals', title: 'Goals', focusedIcon: 'album' },

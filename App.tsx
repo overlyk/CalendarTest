@@ -4,26 +4,32 @@ import { StyleSheet, View, Text } from 'react-native';
 import React from 'react';
 import { useState } from 'react';
 import Login from './src/pages/Login';
-
+import { User } from './src/api/models/User';
+import { Provider } from 'react-native-paper';
 
 //entry point of the application - equivalent to the main function
 //calls AppBar which is bottom nav component responsible for keeping track of routing to different pages
 //calls "login" component which user logs/in out
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-
-  const handleLogin = (status) => {
-    setLoggedIn(status);
+  const [currentUser, setUser] = useState({} as User);
+  const handleLogin = (user: User) => {
+    if (user) {
+      setUser(user);
+      setLoggedIn(true);
+    }
   };
 
   //if logged in, show bottomnavbar and route to main page - if not, show login page
   return (
     <SafeAreaProvider style={styles.container}>
+      <Provider>
         {loggedIn 
         ? 
-        <BottomNavBar /> 
+        <BottomNavBar currentUser={currentUser} /> 
         : 
         <Login handleLogin={handleLogin}/>}
+        </Provider>
     </SafeAreaProvider>
   );
 }

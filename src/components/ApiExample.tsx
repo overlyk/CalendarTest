@@ -33,7 +33,7 @@ useEffect(() => {
          ) : (
             <View>
                <Text>
-                  {user.Name} {user.Password} {user.id}
+                  {user.firstname} {user.password} {user.id}
                </Text>
            {/* <FlatList
              data={userData}

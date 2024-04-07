@@ -7,7 +7,7 @@ import { getUser } from '../api/logic/UserLogic';
 import { User } from '../api/models/User';
 import { TextInput } from 'react-native-paper';
 
-export default function Team() {
+export default function Team({currentUser} : {currentUser: User} ) {
 
     return (
        <Text>team stuff here</Text>
