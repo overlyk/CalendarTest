@@ -1,8 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import React, { Component, useCallback, useEffect, useState } from 'react'
-import Inputs from '../components/Inputs';
-import HttpExample from '../components/ApiExample';
 import { Button, List, Surface, Text } from 'react-native-paper';
 import MyTextBox from '../components/MyTextBox';
 import MyAppBar from '../components/BottomNavBar';
@@ -16,6 +14,8 @@ import { getAllGames } from '../api/logic/GameLogic';
 import ActivityText from '../components/ActivityText';
 import GameText from '../components/GameText';
 import LogoutButton from '../components/LogoutButton';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+
 export default function Home({currentUser, handleLogout} : {currentUser: User, handleLogout: () => void} ) {
   const [date, setDate] = useState(undefined);
   const [open, setOpen] = useState(false);
@@ -23,15 +23,16 @@ export default function Home({currentUser, handleLogout} : {currentUser: User, h
   const [nextActivity, setNextActivity] = useState({} as Activity);
   const [userActivities, setUserActivities] = useState<Activity[]>([]);
   const [userGames, setUserGames] = useState<Game[]>([]);
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = useState(true);
   const handlePress = () => setExpanded(!expanded);
+  const [selected, setSelected] = useState('');
 
   useEffect(() => {
     const fetchActivities = async () => {
       const allActivities = await getAllActivities();
       if (allActivities) {
         const filteredActivities = allActivities
-        .filter(activity => activity.userid === currentUser.id)
+        .filter(activity => activity.userid === currentUser.id  && new Date(activity.starttime) > new Date())
         .sort((a, b) => {
           // Convert start times to Date objects and subtract to get a numeric difference
           const startTimeA = new Date(a.starttime).getTime();
@@ -48,15 +49,23 @@ export default function Home({currentUser, handleLogout} : {currentUser: User, h
     const fetchGames = async () => {
       const allGames = await getAllGames();
       if (allGames) {
-        const filteredGames = allGames.filter(game => (game.hometeamid || game.awayteamid) === currentUser.TeamId);
+        const filteredGames = allGames
+        .filter(game => (game.hometeamid == currentUser.TeamId) || (game.awayteamid == currentUser.TeamId) && new Date(game.starttime) > new Date())
+        .sort((a, b) => {
+          // Convert start times to Date objects and subtract to get a numeric difference
+          const startTimeA = new Date(a.starttime).getTime();
+          const startTimeB = new Date(b.starttime).getTime();
+          return startTimeA - startTimeB;
+        });
         setUserGames(filteredGames);
+        if (filteredGames.length > 0) {
+          setNextGame(filteredGames[0]);
+        }
       }
     };
     fetchActivities();
     fetchGames();
   }, [currentUser.id])
-
-
   const onDismissSingle = useCallback(() => {
     setOpen(false);
   }, [setOpen]);
@@ -67,34 +76,27 @@ export default function Home({currentUser, handleLogout} : {currentUser: User, h
     },
     [setOpen, setDate]
   );
-
   return (
     <View style={styles.container}>
-       <ScrollView style={styles.scrollView}>
-        <Text style ={styles.headerText}>PHEONIX FITNESS</Text> 
-          <LogoutButton handleLogout={handleLogout} />
-            <Text style ={styles.titleText}>Welcome, {currentUser.username}!</Text> 
-            <Text style ={styles.titleText}>Home Page Quick View</Text> 
-            <List.Accordion title="Next Activity" id="1" style ={styles.accordianHeader}>
-                <ActivityText activity={nextActivity}/>
-            </List.Accordion>
-            <List.Accordion title="Next Game" id="2" style ={styles.accordianHeader}>
-                <GameText game={nextGame}/>
-            </List.Accordion>
-        <Text style ={styles.titleText}>Quick Calendar</Text> 
-        <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined">
-          Pick single date
-        </Button>
-        <DatePickerModal
-          locale="en"
-          mode="single"
-          visible={open}
-          onDismiss={onDismissSingle}
-          date={date}
-          onConfirm={onConfirmSingle}
+      <ScrollView style={styles.scrollView}>
+        <Text style ={styles.header}>Home</Text> 
+        <Text style ={styles.titleText}>Welcome, {currentUser.firstname}! {<LogoutButton handleLogout={handleLogout} />}</Text> 
+        <List.Accordion title="Next Activity" id="1" style ={styles.accordianHeader}>
+            <ActivityText activity={nextActivity}/>
+        </List.Accordion>
+        <List.Accordion title="Next Game" id="2" style ={styles.accordianHeader}>
+            <GameText game={nextGame}/>
+        </List.Accordion>
+        <Text style ={styles.titleText}>Schedule at a Glance</Text> 
+        <Calendar
+        onDayPress={day => {
+        setSelected(day.dateString);
+        }}
+        markedDates={{
+          [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'}
+        }}
         />
-        <Text> DEBUG INFO: username: {currentUser.username}, id: {currentUser.id} </Text>
-        </ScrollView>
+      </ScrollView>
     </View>
   );
 }
@@ -105,20 +107,28 @@ const styles = StyleSheet.create({
      flex: 10,
      justifyContent: 'space-evenly',
      //alignContent: 'center',
-     backgroundColor: '#6FCA35'
+     backgroundColor: '#f0f0f0', // Light gray background
   },
   topContainer: {
     flex: .25,
     //alignContent: 'center',
     backgroundColor: '#6FCA35'
  },
+ header: {
+  fontSize: 24,
+  fontWeight: 'bold',
+  marginBottom: 5,
+  marginTop: -5,
+  textAlign: 'center',
+  color: 'green', // Green header text color
+},
  accordianHeader: {
     flex: .25,
     //alignContent: 'center',
     backgroundColor: '#468021'
  },
  scrollView: {
-  backgroundColor: '#6FCA35',
+  backgroundColor: '#f0f0f0', // Light gray background
   marginHorizontal: 5,
 },
   midContainer: {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { variables } from "../../common/Variables";
 import { Team } from "../models/Team";
 
-export const getUser = async (teamId: number): Promise<Team | null> => {
+export const getTeam = async (teamId: number): Promise<Team | null> => {
     try {
         const response = await fetch(variables.API_URL + `/api/Team/${teamId}`, {
             method: 'GET',

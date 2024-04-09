@@ -12,7 +12,7 @@ export default function CustomAppBar() {
 }
     return(
     <Appbar.Header style={styles.container}>
-        <Appbar.Content title="Pheonix Fitness"/>
+        <Appbar.Content title="Phoenix Fitness"/>
         {/* <Appbar.BackAction onPress={() => {}} />
         <Appbar.Action icon="magnify" onPress={() => {}} /> */}
         <Appbar.Action icon={MORE_ICON} onPress={handleOpenMenu} />

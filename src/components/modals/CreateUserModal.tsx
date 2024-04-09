@@ -9,7 +9,6 @@ export default function CreateUserModal({handleModalClose} : {handleModalClose: 
   const containerStyle = {backgroundColor: 'white', padding: 0};
   const { control, handleSubmit, formState: { errors } } = useForm<User>();
 	const onSubmit = (data) => {
-
         const user  = {
           id: 0,
           username: data.username,

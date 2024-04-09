@@ -7,18 +7,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Login from '../pages/Login';
 import Goals from '../pages/Goals';
 import Home from '../pages/Home';
-import Calendar from '../pages/Calendar';
-import Team from '../pages/Team';
+import CalendarPage from '../pages/CalendarPage';
+import Teams from '../pages/Teams';
 import { User } from '../api/models/User';
+import { useState } from 'react';
 
 export default function BottomNavBar({currentUser, handleLogout} : {currentUser: User, handleLogout: () => void} ) {
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = useState(0);
   const HomeRoute = () => <Home currentUser={currentUser} handleLogout = {handleLogout}/>;
   const GoalsRoute = () => <Goals currentUser={currentUser}/>;
-  const TeamRoute = () => <Team currentUser={currentUser}/>;
-  const NotificationsRoute = () => <Calendar currentUser={currentUser}/>;
+  const TeamRoute = () => <Teams currentUser={currentUser}/>;
+  const NotificationsRoute = () => <CalendarPage currentUser={currentUser}/>;
 
-  const [routes] = React.useState([
+  const [routes] = useState([
     { key: 'home', title: 'Home', focusedIcon: 'heart', unfocusedIcon: 'heart-outline'},
     { key: 'goals', title: 'Goals', focusedIcon: 'album' },
     { key: 'team', title: 'Team', focusedIcon: 'history' },

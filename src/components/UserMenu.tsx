@@ -19,8 +19,8 @@ export default function UserMenu(props) {
           ></IconButton>
         }
       >
-        <Menu.Item onPress={() => {}} title="Düzenle" />
-        <Menu.Item onPress={() => {}} title="Sil" />
+        <Menu.Item onPress={() => {}} title="asdf" />
+        <Menu.Item onPress={() => {}} title="Sfdsa" />
       </Menu>
     );
   };

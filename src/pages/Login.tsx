@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { View, Text, Button, ActivityIndicator, StyleSheet, TouchableOpacity  } from 'react-native';
-import Inputs from '../components/Inputs';
 import { getUser, createUser, getAllUsers, loginUser } from '../api/logic/UserLogic';
 import { User } from '../api/models/User';
 import { Surface, TextInput } from 'react-native-paper';
@@ -29,31 +28,31 @@ export default function Login( { handleLogin } : { handleLogin: (user: User) => 
      <View style = {styles.container}>
          {showLoginModal ? <CreateUserModal handleModalClose={() => setShowLoginModal(false)} /> : null}
          <Surface>
-               <Text style ={styles.titleText}>       PHEONIX FITNESS</Text>
-               <TextInput style = {styles.input}
-                 underlineColorAndroid = "transparent"
-                 placeholder = "Email"
-                 placeholderTextColor = "#9a73ef"
-                 autoCapitalize = "none"
-                 onChangeText = {setInputUsername}/>
-               <TextInput style = {styles.input}
-                  underlineColorAndroid = "transparent"
-                  placeholder = "Password"
-                  placeholderTextColor = "#9a73ef"
-                  autoCapitalize = "none"
-                  onChangeText = {setInputPassword}/>
-               <TouchableOpacity
-                  style = {styles.submitButton}
-                  onPress = {authenticateUser}>
-                  <Text style = {styles.submitButtonText}>                                        Login </Text>
-               </TouchableOpacity>
-               <TouchableOpacity
-                  style = {styles.submitButton}
-                  onPress = {() => setShowLoginModal(true)}>
-                  <Text style = {styles.submitButtonText}>                                       Sign Up </Text>
-               </TouchableOpacity>
+            <Text style ={styles.titleText}>       PHEONIX FITNESS</Text>
+            <TextInput style = {styles.input}
+               underlineColorAndroid = "transparent"
+               placeholder = "Email"
+               placeholderTextColor = "#9a73ef"
+               autoCapitalize = "none"
+               onChangeText = {setInputUsername}/>
+            <TextInput style = {styles.input}
+               underlineColorAndroid = "transparent"
+               placeholder = "Password"
+               placeholderTextColor = "#9a73ef"
+               autoCapitalize = "none"
+               onChangeText = {setInputPassword}/>
+            <TouchableOpacity
+               style = {styles.submitButton}
+               onPress = {authenticateUser}>
+               <Text style = {styles.submitButtonText}>                                        Login </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+               style = {styles.submitButton}
+               onPress = {() => setShowLoginModal(true)}>
+               <Text style = {styles.submitButtonText}>                                       Sign Up </Text>
+            </TouchableOpacity>
 
-               </Surface>
+            </Surface>
     </View>
     );
 }
