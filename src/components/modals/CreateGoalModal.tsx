@@ -10,7 +10,7 @@ import GreenButton from '../GreenButton';
 export default function CreateGoalModal({handleModalClose, fetchGoals, isVisible, userId} : {handleModalClose: () => void; fetchGoals: () => void; isVisible: boolean; userId: number}) {
   const { control, handleSubmit, formState: { errors } } = useForm<Goal>();
 	
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const goal = {
       id: 0,
       userid: userId,
@@ -21,7 +21,7 @@ export default function CreateGoalModal({handleModalClose, fetchGoals, isVisible
     }
 
     console.log('New Goal');
-	  createGoal(goal);
+	  await createGoal(goal);
     fetchGoals();
     handleModalClose();
   };
