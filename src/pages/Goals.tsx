@@ -2,7 +2,7 @@
 //Split into Team Goals and User Goals
 
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, View, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, View, FlatList, Modal, Button, TextInput, TouchableOpacity } from 'react-native';
 import React, { Component, useState, useEffect } from 'react'
 import Inputs from '../components/Inputs';
 import HttpExample from '../components/ApiExample';
@@ -14,32 +14,45 @@ import { User } from '../api/models/User';
 import { Goal } from '../api/models/Goal';
 import { getAllGoals } from '../api/logic/GoalLogic';
 import GreenButton from '../components/GreenButton';
+import CreateGoalModal from '../components/modals/CreateGoalModal';
 
 
 export default function Goals({currentUser} : {currentUser : User}) {
     const [userGoals, setUserGoals] = useState<Goal[]>([]);
-    useEffect(() => {
-        const fetchGoals = async () => {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openModal = () => {
+      setModalVisible(true);
+    };
+
+    const closeModal = () => {
+      setModalVisible(false);
+    };
+
+  
+    const fetchGoals = async () => {
       const allGoals = await getAllGoals();
       if (allGoals) {
         const filteredGoals = allGoals.filter(goal => goal.userid === currentUser.id);
         setUserGoals(filteredGoals);
       }
+      //console.log("I'm here");
     };
-    fetchGoals();
-    }, [currentUser.id])
+    
+    useEffect(() => {fetchGoals()}, []);
 
 
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>{`${currentUser.firstname}'s Goals`}</Text>
-      <GreenButton text="Create Goal" onPress={() => console.log("goal created")}/>
+      <GreenButton text="Create Goal" onPress={openModal}/>
+      <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} userId={currentUser.id}></CreateGoalModal>
       <FlatList
         style={{margin: 10}}
         data={userGoals}
         renderItem={({ item }) => (
-          <View style={styles.goalView}>
+          <TouchableOpacity style={styles.goalView} onPress={() => console.log("goal pressed")}>
             <View>
               <Text style={styles.goalItem}>{item.name}</Text>
               <Text>{item.description}</Text>
@@ -47,7 +60,7 @@ export default function Goals({currentUser} : {currentUser : User}) {
             <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
               {item.isCompleted ? 'Complete' : 'In Progress'}
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
         keyExtractor={item => item.id.toString()}
       />
