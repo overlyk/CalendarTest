@@ -1,12 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import React, { Component, useCallback, useEffect, useState } from 'react'
 import { Button, List, Surface, Text } from 'react-native-paper';
-import MyTextBox from '../components/MyTextBox';
-import MyAppBar from '../components/BottomNavBar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { User } from '../api/models/User';
-import { DatePickerModal } from 'react-native-paper-dates';
 import { Game } from '../api/models/Game';
 import { Activity } from '../api/models/Activity';
 import { getAllActivities } from '../api/logic/ActivityLogic';
@@ -17,14 +12,8 @@ import LogoutButton from '../components/LogoutButton';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 export default function Home({currentUser, handleLogout} : {currentUser: User, handleLogout: () => void} ) {
-  const [date, setDate] = useState(undefined);
-  const [open, setOpen] = useState(false);
   const [nextGame, setNextGame] = useState({} as Game);
   const [nextActivity, setNextActivity] = useState({} as Activity);
-  const [userActivities, setUserActivities] = useState<Activity[]>([]);
-  const [userGames, setUserGames] = useState<Game[]>([]);
-  const [expanded, setExpanded] = useState(true);
-  const handlePress = () => setExpanded(!expanded);
   const [selected, setSelected] = useState('');
 
   useEffect(() => {
@@ -39,7 +28,6 @@ export default function Home({currentUser, handleLogout} : {currentUser: User, h
           const startTimeB = new Date(b.starttime).getTime();
           return startTimeA - startTimeB;
         });
-      setUserActivities(filteredActivities);
       // Set the next activity by taking the first element from the sorted array
       if (filteredActivities.length > 0) {
         setNextActivity(filteredActivities[0]);
@@ -57,7 +45,6 @@ export default function Home({currentUser, handleLogout} : {currentUser: User, h
           const startTimeB = new Date(b.starttime).getTime();
           return startTimeA - startTimeB;
         });
-        setUserGames(filteredGames);
         if (filteredGames.length > 0) {
           setNextGame(filteredGames[0]);
         }
@@ -66,16 +53,6 @@ export default function Home({currentUser, handleLogout} : {currentUser: User, h
     fetchActivities();
     fetchGames();
   }, [currentUser.id])
-  const onDismissSingle = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-  const onConfirmSingle = useCallback(
-    (params) => {
-      setOpen(false);
-      setDate(params.date);
-    },
-    [setOpen, setDate]
-  );
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>

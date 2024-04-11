@@ -116,8 +116,8 @@ export const createUser = async (user: User): Promise<boolean> => {
                 id: 0,
                 username: user.username,
                 password: user.password,
-                firstname: "",
-                lastname: "",
+                firstname: user.firstname,
+                lastname: user.lastname,
                 TeamId: 0,
                 isCoach: 0
             })

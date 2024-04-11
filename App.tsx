@@ -7,6 +7,7 @@ import Login from './src/pages/Login';
 import { User } from './src/api/models/User';
 import { Provider } from 'react-native-paper';
 import CustomAppBar from './src/components/CustomAppBar';
+import { enGB, registerTranslation } from 'react-native-paper-dates'
 //entry point of the application - equivalent to the main function
 //calls AppBar which is bottom nav component responsible for keeping track of routing to different pages
 //calls "login" component which user logs/in out
@@ -19,7 +20,7 @@ export default function App() {
       setLoggedIn(true);
     }
   };
-
+  registerTranslation("en", enGB);
   const handleLogout = () => {
       setLoggedIn(false);
   };

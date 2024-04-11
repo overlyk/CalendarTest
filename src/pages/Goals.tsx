@@ -1,15 +1,9 @@
 ///this will show the Goals screen
 //Split into Team Goals and User Goals
 
-import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View, FlatList, Modal, Button, TextInput, TouchableOpacity } from 'react-native';
 import React, { Component, useState, useEffect } from 'react'
-import Inputs from '../components/Inputs';
-import HttpExample from '../components/ApiExample';
 import { Surface, Text } from 'react-native-paper';
-import MyTextBox from '../components/MyTextBox';
-import MyAppBar from '../components/BottomNavBar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { User } from '../api/models/User';
 import { Goal } from '../api/models/Goal';
 import { getAllGoals } from '../api/logic/GoalLogic';
@@ -29,19 +23,15 @@ export default function Goals({currentUser} : {currentUser : User}) {
       setModalVisible(false);
     };
 
-  
     const fetchGoals = async () => {
       const allGoals = await getAllGoals();
       if (allGoals) {
         const filteredGoals = allGoals.filter(goal => goal.userid === currentUser.id);
         setUserGoals(filteredGoals);
       }
-      //console.log("I'm here");
     };
     
     useEffect(() => {fetchGoals()}, []);
-
-
 
   return (
     <SafeAreaView style={styles.container}>

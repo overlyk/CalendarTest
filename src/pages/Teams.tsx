@@ -1,29 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import React, { Component, useCallback, useEffect, useState } from 'react'
 import { Button, Divider, List, Surface, Text } from 'react-native-paper';
-import MyTextBox from '../components/MyTextBox';
-import MyAppBar from '../components/BottomNavBar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { User } from '../api/models/User';
-import { DatePickerModal } from 'react-native-paper-dates';
 import { Game } from '../api/models/Game';
 import { Activity } from '../api/models/Activity';
 import { getAllActivities } from '../api/logic/ActivityLogic';
 import { getAllGames } from '../api/logic/GameLogic';
-import ActivityText from '../components/ActivityText';
-import GameText from '../components/GameText';
-import LogoutButton from '../components/LogoutButton';
 import { getAllTeams, getTeam } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 import GreenButton from '../components/GreenButton';
 import { format } from 'date-fns';
 
 export default function Teams({currentUser} : {currentUser: User} ) {
-  const [date, setDate] = useState(undefined);
-  const [open, setOpen] = useState(false);
-  const [nextGame, setNextGame] = useState({} as Game);
-  const [nextActivity, setNextActivity] = useState({} as Activity);
   const [teamActivities, setTeamActivities] = useState<Activity[]>([]);
   const [teamGames, setTeamGames] = useState<Game[]>([]);
   const [teamsList, setTeamsList] = useState<Team[]>([]);
@@ -48,10 +36,6 @@ export default function Teams({currentUser} : {currentUser: User} ) {
         return startTimeA - startTimeB;
       });
     setTeamActivities(filteredActivities);
-    // Set the next activity by taking the first element from the sorted array
-    if (filteredActivities.length > 0) {
-      setNextActivity(filteredActivities[0]);
-    }
     }
   };
   const fetchTeamGames = async () => {
@@ -66,9 +50,6 @@ export default function Teams({currentUser} : {currentUser: User} ) {
         return startTimeA - startTimeB;
       });
       setTeamGames(filteredGames);
-      if (filteredGames.length > 0) {
-        setNextGame(filteredGames[0]);
-      }
     }
   };
 
@@ -102,9 +83,6 @@ export default function Teams({currentUser} : {currentUser: User} ) {
                           <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
                           <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
                         </View>
-                        {/* <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
-                          {item.isCompleted ? 'Complete' : 'In Progress'}
-                        </Text> */}
                       </View>
                     )}
                     keyExtractor={item => item.id.toString()}
@@ -129,9 +107,6 @@ export default function Teams({currentUser} : {currentUser: User} ) {
                           <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
                           <Divider />
                         </View>
-                        {/* <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
-                          {item.isCompleted ? 'Complete' : 'In Progress'}
-                        </Text> */}
                       </View>
                     )}
                     keyExtractor={item => item.id.toString()}

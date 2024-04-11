@@ -7,8 +7,9 @@ import { User } from '../../api/models/User';
 import {useForm, Controller} from 'react-hook-form';
 export default function CreateUserModal({handleModalClose} : {handleModalClose: () => void}) {
   const containerStyle = {backgroundColor: 'white', padding: 0};
+  
   const { control, handleSubmit, formState: { errors } } = useForm<User>();
-	const onSubmit = (data) => {
+	const onSubmit = async (data) => {
         const user  = {
           id: 0,
           username: data.username,
@@ -19,9 +20,10 @@ export default function CreateUserModal({handleModalClose} : {handleModalClose: 
           TeamId: 1
         }
       console.log('New User');
-			createUser(user);
+			await createUser(user);
       handleModalClose();
 	};
+
   return (
     <View>
       <Portal>
@@ -60,15 +62,42 @@ export default function CreateUserModal({handleModalClose} : {handleModalClose: 
               name="password"
             />
             {errors.password && <Text>This is required.</Text>}
+
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 100,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="First Name"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="firstname"
+            />
+            {errors.password && <Text>This is required.</Text>}
+
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 100,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="Last Name"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="lastname"
+            />
+            {errors.password && <Text>This is required.</Text>}
          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
          <Button title="Cancel" onPress={handleModalClose} />
-{/* <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-            <TouchableOpacity style = {styles.submitButton} onPress = {handleSubmit}>
-              <Text style = {styles.submitButtonText}> Submit </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style = {styles.submitButton} onPress = {handleModalClose}>
-              <Text style = {styles.submitButtonText}> Exit </Text>
-            </TouchableOpacity> */}
         </Modal>
       </Portal>
     </View>

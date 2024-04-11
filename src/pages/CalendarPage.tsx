@@ -1,32 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import React, { Component, useCallback, useEffect, useState } from 'react'
 import { Button, Divider, List, Surface, Text } from 'react-native-paper';
-import MyTextBox from '../components/MyTextBox';
-import MyAppBar from '../components/BottomNavBar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { User } from '../api/models/User';
-import { DatePickerModal } from 'react-native-paper-dates';
 import { Game } from '../api/models/Game';
 import { Activity } from '../api/models/Activity';
 import { getAllActivities } from '../api/logic/ActivityLogic';
 import { getAllGames } from '../api/logic/GameLogic';
-import ActivityText from '../components/ActivityText';
-import GameText from '../components/GameText';
-import LogoutButton from '../components/LogoutButton';
 import { format } from 'date-fns';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import { getAllTeams } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
+import CreateActivityModal from '../components/modals/CreateActivityModal';
+import GreenButton from '../components/GreenButton';
 
 export default function CalendarPage({currentUser} : {currentUser: User} ) {
   const [selected, setSelected] = useState('');
-  const [nextGame, setNextGame] = useState({} as Game);
-  const [nextActivity, setNextActivity] = useState({} as Activity);
   const [userActivities, setUserActivities] = useState<Activity[]>([]);
   const [userGames, setUserGames] = useState<Game[]>([]);
   const [teamsList, setTeamsList] = useState<Team[]>([]);
-  
+  const [modalVisible, setModalVisible] = useState(false);
   const fetchTeams = async () => {
     const allTeams = await getAllTeams();
     if (allTeams) {
@@ -58,67 +50,63 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
   return (
     <View style={styles.container}>
        <ScrollView style={styles.scrollView}>
-       <Text style={styles.header}>{`${currentUser.firstname}'s Calendar`}</Text>
-       <Text style={styles.header}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
-       <Calendar
-      onDayPress={day => {
-        setSelected(day.dateString);
-      }}
-      markedDates={{
-        [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'}
-      }}
-    />
-              <View>
-                <Text style={styles.header}>Activities</Text>
-                <View>
-                  <FlatList
-                    style={{margin: 10}}
-                    data={userActivities.filter(activity => new Date(activity.starttime).getDate() == new Date(selected).getDate() && new Date(activity.starttime).getMonth() == new Date(selected).getMonth() && new Date(activity.starttime).getFullYear() == new Date(selected).getFullYear())}
-                    scrollEnabled={false}
-                    renderItem={({ item }) => (
-                      <View style={styles.goalView}>
-                        <View>
-                          <Text style={styles.goalItem}>{item.name}</Text>
-                          <Text>{item.description}</Text>
-                          <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
-                          <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
-                        </View>
-                        {/* <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
-                          {item.isCompleted ? 'Complete' : 'In Progress'}
-                        </Text> */}
-                      </View>
-                    )}
-                    keyExtractor={item => item.id.toString()}
-                  />
-                </View>
-                <Text style={styles.header}>Next Games In Schedule!</Text>
-                <View>
-                  <FlatList
-                    style={{margin: 10}}
-                    data={userGames.filter(userGames => new Date(userGames.starttime).getDate() == new Date(selected).getDate() && new Date(userGames.starttime).getMonth() == new Date(selected).getMonth() && new Date(userGames.starttime).getFullYear() == new Date(selected).getFullYear())}
-                    scrollEnabled={false}
-                    renderItem={({ item }) => (
-                      <View style={styles.goalView}>
-                        <View>
-                          <Text style={styles.goalItem}>
-                          HOME TEAM - {teamsList.find(team => team.id === item.hometeamid)?.name}
-                          </Text>
-                          <Text style={styles.goalItem}>
-                          AWAY TEAM  - {teamsList.find(team => team.id === item.awayteamid)?.name}
-                          </Text>
-                          <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
-                          <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
-                          <Divider />
-                        </View>
-                        {/* <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
-                          {item.isCompleted ? 'Complete' : 'In Progress'}
-                        </Text> */}
-                      </View>
-                    )}
-                    keyExtractor={item => item.id.toString()}
-                  />
-                </View>
-              </View>
+        <Text style={styles.header}>{`${currentUser.firstname}'s Calendar`}</Text>
+        <Text style={styles.header}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
+        <GreenButton text="Create Activity" onPress={() => setModalVisible(true)}/>
+        <CreateActivityModal handleModalClose={() => setModalVisible(false)} fetchActivities={fetchActivities} isVisible={modalVisible} userId={currentUser.id} />
+        <Calendar
+          onDayPress={day => {
+            setSelected(day.dateString);
+          }}
+          markedDates={{
+            [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'}
+          }}
+        />
+          <View>
+            <Text style={styles.header}>Activities</Text>
+            <View>
+              <FlatList
+                style={{margin: 10}}
+                data={userActivities.filter(activity => new Date(activity.starttime).getDate() == new Date(selected).getDate() && new Date(activity.starttime).getMonth() == new Date(selected).getMonth() && new Date(activity.starttime).getFullYear() == new Date(selected).getFullYear())}
+                scrollEnabled={false}
+                renderItem={({ item }) => (
+                  <View style={styles.goalView}>
+                    <View>
+                      <Text style={styles.goalItem}>{item.name}</Text>
+                      <Text>{item.description}</Text>
+                      <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
+                      <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
+                    </View>
+                  </View>
+                )}
+                keyExtractor={item => item.id.toString()}
+              />
+            </View>
+            <Text style={styles.header}>Next Games In Schedule!</Text>
+            <View>
+              <FlatList
+                style={{margin: 10}}
+                data={userGames.filter(userGames => new Date(userGames.starttime).getDate() == new Date(selected).getDate() && new Date(userGames.starttime).getMonth() == new Date(selected).getMonth() && new Date(userGames.starttime).getFullYear() == new Date(selected).getFullYear())}
+                scrollEnabled={false}
+                renderItem={({ item }) => (
+                  <View style={styles.goalView}>
+                    <View>
+                      <Text style={styles.goalItem}>
+                      HOME TEAM - {teamsList.find(team => team.id === item.hometeamid)?.name}
+                      </Text>
+                      <Text style={styles.goalItem}>
+                      AWAY TEAM  - {teamsList.find(team => team.id === item.awayteamid)?.name}
+                      </Text>
+                      <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
+                      <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
+                      <Divider />
+                    </View>
+                  </View>
+                )}
+                keyExtractor={item => item.id.toString()}
+              />
+            </View>
+          </View>
         </ScrollView>
     </View>
   );
