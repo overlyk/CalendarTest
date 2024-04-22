@@ -9,6 +9,7 @@ import { Goal } from '../api/models/Goal';
 import { getAllGoals } from '../api/logic/GoalLogic';
 import GreenButton from '../components/GreenButton';
 import CreateGoalModal from '../components/modals/CreateGoalModal';
+import { deleteGoal } from '../api/logic/GoalLogic';
 
 
 export default function Goals({currentUser} : {currentUser : User}) {
@@ -33,6 +34,11 @@ export default function Goals({currentUser} : {currentUser : User}) {
     
     useEffect(() => {fetchGoals()}, []);
 
+    const deleteAndRefresh = async (id: number) => {
+      await deleteGoal(id);
+      fetchGoals();
+    }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>{`${currentUser.firstname}'s Goals`}</Text>
@@ -42,15 +48,18 @@ export default function Goals({currentUser} : {currentUser : User}) {
         style={{margin: 10}}
         data={userGoals}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.goalView} onPress={() => console.log("goal pressed")}>
-            <View>
+          <View style={styles.goalView}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Text style={styles.goalItem}>{item.name}</Text>
               <Text>{item.description}</Text>
             </View>
             <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
               {item.isCompleted ? 'Complete' : 'In Progress'}
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+              <Text style={{color: 'white'}}>X</Text>
+            </TouchableOpacity>
+          </View>
         )}
         keyExtractor={item => item.id.toString()}
       />
@@ -86,21 +95,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     color: 'green', // Green goal text color
   },
-  button: {
-    backgroundColor: 'green',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 6,
-    elevation: 3, // for Android shadow
-    shadowColor: '#000', // for iOS shadow
-    shadowOffset: { width: 0, height: 2 }, // for iOS shadow
-    shadowOpacity: 0.2, // for iOS shadow
-    shadowRadius: 2, // for iOS shadow
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-  },
+  deleteButton: {
+    backgroundColor: 'red',
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
