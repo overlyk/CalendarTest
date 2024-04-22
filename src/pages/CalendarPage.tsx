@@ -19,6 +19,12 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
   const [userGames, setUserGames] = useState<Game[]>([]);
   const [teamsList, setTeamsList] = useState<Team[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [activityDateList, setActivityDateList] = useState<string[]>([]);
+  const [gameDateList, setGameDateList] = useState<string[]>([]);
+  const [currentDates, setCurrentDates] = useState({});
+  const [hasGame, setHasGame] = useState([]);
+  const currentUserTeam = teamsList.find(team => team.id === currentUser.TeamId);
+
   const fetchTeams = async () => {
     const allTeams = await getAllTeams();
     if (allTeams) {
@@ -26,11 +32,15 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
     }
   };
 
+
+
   const fetchActivities = async () => {
     const allActivities = await getAllActivities();
     if (allActivities) {
       const filteredActivities = allActivities.filter(activity => activity.userid === currentUser.id || activity.teamid === currentUser.TeamId)
-    setUserActivities(filteredActivities);
+      setUserActivities(filteredActivities);
+      setActivityDateList(filteredActivities.map(activity => format(new Date(activity.starttime), 'yyyy-MM-dd')));
+      console.log("activities: " + filteredActivities);
     }
   };
   const fetchGames = async () => {
@@ -38,6 +48,19 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
     if (allGames) {
       const filteredGames = allGames.filter(game => (game.hometeamid == currentUser.TeamId) || (game.awayteamid == currentUser.TeamId));
       setUserGames(filteredGames);
+      setGameDateList(filteredGames.map(game => format(new Date(game.starttime), 'yyyy-MM-dd')));
+      console.log("games " + filteredGames);
+      setCurrentDates(() => {
+        let dates = {};
+        activityDateList.forEach(date => {
+          dates[date] = { marked: true, dotColor: 'blue' }
+        });
+        gameDateList.forEach(date => {
+          dates[date] = { marked: true, dotColor: 'red' }
+        });
+        return dates;
+      });
+      console.log(currentDates.toString());
     }
   };
 
@@ -50,15 +73,17 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
   return (
     <View style={styles.container}>
        <ScrollView style={styles.scrollView}>
-        <Text style={styles.header}>{`${currentUser.firstname}'s Calendar`}</Text>
+        <Text style={styles.header}>{currentUser.isCoach ? `${currentUserTeam?.name}'s Calendar` : `${currentUser.firstname}'s Calendar`}</Text>
         <Text style={styles.header}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
-        <GreenButton text="Create Activity" onPress={() => setModalVisible(true)}/>
-        <CreateActivityModal handleModalClose={() => setModalVisible(false)} fetchActivities={fetchActivities} isVisible={modalVisible} userId={currentUser.id} />
+        <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setModalVisible(true)}/>
+        <CreateActivityModal handleModalClose={() => setModalVisible(false)} fetchActivities={fetchActivities} isVisible={modalVisible} user={currentUser}/>
         <Calendar
           onDayPress={day => {
             setSelected(day.dateString);
           }}
           markedDates={{
+            currentDates,
+            //['2024-04-17']: {marked: true, selectedColor: 'orange'},
             [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'}
           }}
         />

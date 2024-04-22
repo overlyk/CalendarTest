@@ -10,12 +10,15 @@ import { getAllTeams, getTeam } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 import GreenButton from '../components/GreenButton';
 import { format } from 'date-fns';
-
+import CreateGameModal from '../components/modals/CreateGameModal';
+import ViewTeamModal from '../components/modals/ViewTeamModal';
 export default function Teams({currentUser} : {currentUser: User} ) {
   const [teamActivities, setTeamActivities] = useState<Activity[]>([]);
   const [teamGames, setTeamGames] = useState<Game[]>([]);
   const [teamsList, setTeamsList] = useState<Team[]>([]);
   const currentUserTeam = teamsList.find(team => team.id === currentUser.TeamId);
+  const [gameModalVisible, setGameModalVisible] = useState(false);
+  const [teamModalVisible, setTeamModalVisible] = useState(false);
 
   const fetchTeams = async () => {
     const allTeams = await getAllTeams();
@@ -23,7 +26,6 @@ export default function Teams({currentUser} : {currentUser: User} ) {
       setTeamsList(allTeams);
     }
   };
-  
   const fetchTeamActivities = async () => {
     const allActivities = await getAllActivities();
     if (allActivities) {
@@ -66,7 +68,10 @@ export default function Teams({currentUser} : {currentUser: User} ) {
           : 
           <>
             <Text style={styles.header}>{currentUserTeam?.name} Homepage!</Text>
-            <GreenButton text="View Team" onPress={() => console.log("viewing team")}/>
+            <GreenButton text="View Team" onPress={() => setTeamModalVisible(!teamModalVisible)}/>
+            {currentUser.isCoach ? <GreenButton text="Schedule New Game" onPress={() => setGameModalVisible(!gameModalVisible)}/> : null}
+            {currentUser.isCoach ? <CreateGameModal handleModalClose={() => setGameModalVisible(!gameModalVisible)} teams={teamsList} fetchTeamGames={fetchTeamGames} isVisible={gameModalVisible} userId={currentUser.id}></CreateGameModal> : null}
+            {currentUserTeam ? <ViewTeamModal handleModalClose={() => setTeamModalVisible(!teamModalVisible)} team={currentUserTeam} isVisible={teamModalVisible} userId={currentUser.id}></ViewTeamModal> : null}
             <ScrollView>
               <View>
                 <Text style={styles.header}>Team Activities Coming Up!</Text>

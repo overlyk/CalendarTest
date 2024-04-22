@@ -7,18 +7,28 @@ import GreenButton from '../GreenButton';
 import { createActivity } from '../../api/logic/ActivityLogic';
 import { Activity } from '../../api/models/Activity';
 import { DatePickerInput } from 'react-native-paper-dates';
+import { User } from '../../api/models/User';
 
-export default function CreateActivityModal({handleModalClose, fetchActivities, isVisible, userId} : {handleModalClose: () => void; fetchActivities: () => void; isVisible: boolean; userId: number}) {
+export default function CreateActivityModal({handleModalClose, fetchActivities, isVisible, user} : {handleModalClose: () => void; fetchActivities: () => void; isVisible: boolean; user: User}) {
   const { control, handleSubmit, formState: { errors } } = useForm<Activity>();
 	
   const onSubmit = async (data) => {
-    const activity = {
+    const activity = user.isCoach && user.TeamId ? {
       id: 0,
       name: data.name,
       description: data.description,
       starttime: data.starttime,
       endtime: data.endtime,
-      userid: userId,
+      userid: user.id,
+      teamid: user.TeamId,
+      location: data.location
+    } : {
+      id: 0,
+      name: data.name,
+      description: data.description,
+      starttime: data.starttime,
+      endtime: data.endtime,
+      userid: user.id,
       teamid: 0,
       location: data.location
     }
@@ -32,7 +42,7 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
     <View>
       <Portal>
         <Modal visible={isVisible} contentContainerStyle={styles.container}>
-          <Text style ={styles.titleText}>NEW ACTIVITY</Text>
+          <Text style ={styles.titleText}>{user.isCoach ? 'NEW TEAM ACTIVITY' : 'NEW ACTIVITY'}</Text>
             <Controller
               control={control}
               rules={{
@@ -42,7 +52,7 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
                 <TextInput
                   placeholder="Activity Name"
                   onBlur={onBlur}
-                  onChangeText={onChange}
+                  onSelectionChange={onChange}
                   value={value}
                 />
               )}
@@ -82,7 +92,7 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
               )}
               name="location"
             />
-            {errors.name && <Text>This is required.</Text>}
+            {errors.location && <Text>This is required.</Text>}
 
             <Controller
               control={control}
@@ -101,7 +111,7 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
               )}
               name="starttime"
             />
-            {errors.name && <Text>This is required.</Text>}
+            {errors.starttime && <Text>This is required.</Text>}
 
             <Controller
               control={control}
@@ -120,7 +130,7 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
               )}
               name="endtime"
             />
-            {errors.name && <Text>This is required.</Text>}
+            {errors.endtime && <Text>This is required.</Text>}
          <GreenButton onPress={handleSubmit(onSubmit)} text="Submit"/>
          <GreenButton onPress={handleModalClose} text="Cancel"/>
         </Modal>

@@ -13,8 +13,8 @@ export default function ActivityText({ activity } : { activity: Activity }) {
         <View>  
         <Text style={styles.activitiesText}>Name: {activity.name}</Text>
         <Text style={styles.activitiesText}>Description: {activity.description}</Text>
-        <Text style={styles.activitiesText}>Start Time: {format(new Date(activity.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
-        <Text style={styles.activitiesText}>End Time: {format(new Date(activity.endtime + 'Z'), 'MM/dd/yyyy')}</Text>
+        <Text style={styles.activitiesText}>Start Time: {activity.starttime ? format(new Date(activity.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
+        <Text style={styles.activitiesText}>End Time: {activity.endtime ? format(new Date(activity.endtime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
         <Text style={styles.activitiesText}>Location: {activity.location}</Text>
         </View>
        :  <Text>There are no activities currently scheduled</Text>}
