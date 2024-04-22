@@ -10,13 +10,24 @@ import ActivityText from '../components/ActivityText';
 import GameText from '../components/GameText';
 import LogoutButton from '../components/LogoutButton';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
+import { getAllTeams } from '../api/logic/TeamLogic';
+import { Team } from '../api/models/Team';
 
 export default function Home({currentUser, handleLogout} : {currentUser: User, handleLogout: () => void} ) {
   const [nextGame, setNextGame] = useState({} as Game);
   const [nextActivity, setNextActivity] = useState({} as Activity);
   const [selected, setSelected] = useState('');
-
+  const [currentTeam, setCurrentTeam] = useState({} as Team)
   useEffect(() => {
+    const fetchTeams = async () => {
+      const allTeams = await getAllTeams();
+      if (allTeams) {
+        const userTeam = allTeams.find(x => x.id === currentUser.TeamId);
+        if (userTeam) {
+          setCurrentTeam(userTeam);
+        }
+      }
+    };
     const fetchActivities = async () => {
       const allActivities = await getAllActivities();
       if (allActivities) {

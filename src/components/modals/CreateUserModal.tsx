@@ -1,5 +1,3 @@
-//this is an example of a modal popup in react native
-import * as React from 'react';
 import { Modal, Portal, Text, PaperProvider, TextInput } from 'react-native-paper';
 import { TouchableOpacity, Button, View, StyleSheet } from 'react-native';
 import { createUser } from '../../api/logic/UserLogic';
@@ -7,9 +5,8 @@ import { User } from '../../api/models/User';
 import {useForm, Controller} from 'react-hook-form';
 export default function CreateUserModal({handleModalClose} : {handleModalClose: () => void}) {
   const containerStyle = {backgroundColor: 'white', padding: 0};
-  
   const { control, handleSubmit, formState: { errors } } = useForm<User>();
-	const onSubmit = async (data) => {
+	const onSubmit = (data) => {
         const user  = {
           id: 0,
           username: data.username,
@@ -20,10 +17,9 @@ export default function CreateUserModal({handleModalClose} : {handleModalClose: 
           TeamId: 1
         }
       console.log('New User');
-			await createUser(user);
+			createUser(user);
       handleModalClose();
 	};
-
   return (
     <View>
       <Portal>
@@ -60,40 +56,6 @@ export default function CreateUserModal({handleModalClose} : {handleModalClose: 
                 />
               )}
               name="password"
-            />
-            {errors.password && <Text>This is required.</Text>}
-
-            <Controller
-              control={control}
-              rules={{
-                maxLength: 100,
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  placeholder="First Name"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
-              name="firstname"
-            />
-            {errors.password && <Text>This is required.</Text>}
-
-            <Controller
-              control={control}
-              rules={{
-                maxLength: 100,
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  placeholder="Last Name"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
-              name="lastname"
             />
             {errors.password && <Text>This is required.</Text>}
          <Button title="Submit" onPress={handleSubmit(onSubmit)} />

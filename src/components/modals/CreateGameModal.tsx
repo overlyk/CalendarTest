@@ -158,7 +158,7 @@ export default function CreateGameModal({handleModalClose, fetchTeamGames, teams
 };
 const styles = StyleSheet.create({
     dropdownButtonStyle: {
-        width: 200,
+        width: 350,
         height: 50,
         backgroundColor: '#E9ECEF',
         borderRadius: 12,

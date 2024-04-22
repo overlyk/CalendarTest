@@ -12,13 +12,15 @@ import { getAllTeams } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 import CreateActivityModal from '../components/modals/CreateActivityModal';
 import GreenButton from '../components/GreenButton';
+import ViewAllActivitiesModal from '../components/modals/ViewAllActivitiesModal';
 
 export default function CalendarPage({currentUser} : {currentUser: User} ) {
   const [selected, setSelected] = useState('');
   const [userActivities, setUserActivities] = useState<Activity[]>([]);
   const [userGames, setUserGames] = useState<Game[]>([]);
   const [teamsList, setTeamsList] = useState<Team[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [viewModalVisible, setViewModalVisible] = useState(false);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
   const [activityDateList, setActivityDateList] = useState<string[]>([]);
   const [gameDateList, setGameDateList] = useState<string[]>([]);
   const [currentDates, setCurrentDates] = useState({});
@@ -75,8 +77,10 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
        <ScrollView style={styles.scrollView}>
         <Text style={styles.header}>{currentUser.isCoach ? `${currentUserTeam?.name}'s Calendar` : `${currentUser.firstname}'s Calendar`}</Text>
         <Text style={styles.header}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
-        <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setModalVisible(true)}/>
-        <CreateActivityModal handleModalClose={() => setModalVisible(false)} fetchActivities={fetchActivities} isVisible={modalVisible} user={currentUser}/>
+        <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setCreateModalVisible(true)}/>
+        <GreenButton text={currentUser.isCoach ? "View Team Activities" : "View Activities"} onPress={() => setViewModalVisible(true)}/>
+        <ViewAllActivitiesModal handleModalClose={() => setViewModalVisible(false)} refetchActivities={fetchActivities} activities={userActivities} isVisible={viewModalVisible} currentUser={currentUser}/>
+        <CreateActivityModal handleModalClose={() => setCreateModalVisible(false)} fetchActivities={fetchActivities} isVisible={createModalVisible} user={currentUser}/>
         <Calendar
           onDayPress={day => {
             setSelected(day.dateString);
