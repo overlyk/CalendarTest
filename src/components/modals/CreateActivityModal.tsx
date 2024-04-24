@@ -4,39 +4,60 @@ import { Modal, Portal, Text, PaperProvider, TextInput } from 'react-native-pape
 import { View, StyleSheet } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import GreenButton from '../GreenButton';
-import { createActivity } from '../../api/logic/ActivityLogic';
+import { createActivity, updateActivity } from '../../api/logic/ActivityLogic';
 import { Activity } from '../../api/models/Activity';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { User } from '../../api/models/User';
+import { useEffect } from 'react';
 
-export default function CreateActivityModal({handleModalClose, fetchActivities, isVisible, user} : {handleModalClose: () => void; fetchActivities: () => void; isVisible: boolean; user: User}) {
-  const { control, handleSubmit, formState: { errors } } = useForm<Activity>();
+export default function CreateActivityModal({handleModalClose, fetchActivities, isVisible, user, activityToEdit} : {handleModalClose: () => void; fetchActivities: () => void; isVisible: boolean; user: User; activityToEdit?: Activity}) {
+  const { control, handleSubmit, formState: { errors }, setValue } = useForm<Activity>();
 	
   const onSubmit = async (data) => {
-    const activity = user.isCoach && user.TeamId ? {
-      id: 0,
+    const activity = activityToEdit ? {
+      id: activityToEdit.id,
       name: data.name,
       description: data.description,
       starttime: data.starttime,
       endtime: data.endtime,
-      userid: user.id,
-      teamid: user.TeamId,
+      userid: activityToEdit.id,
+      teamid: activityToEdit.teamid,
       location: data.location
-    } : {
-      id: 0,
-      name: data.name,
-      description: data.description,
-      starttime: data.starttime,
-      endtime: data.endtime,
-      userid: user.id,
-      teamid: 0,
-      location: data.location
-    }
-    console.log('New Activity');
-	  await createActivity(activity);
+    } : user.isCoach && user.TeamId ? {
+        id: 0,
+        name: data.name,
+        description: data.description,
+        starttime: data.starttime,
+        endtime: data.endtime,
+        userid: user.id,
+        teamid: user.TeamId,
+        location: data.location
+      } : {
+        id: 0,
+        name: data.name,
+        description: data.description,
+        starttime: data.starttime,
+        endtime: data.endtime,
+        userid: user.id,
+        teamid: 0,
+        location: data.location
+      }
+    
+	  activityToEdit ? await updateActivity(activity) : await createActivity(activity);
     fetchActivities();
     handleModalClose();
   };
+
+  useEffect(() => {
+    if (activityToEdit != null)
+    {
+      setValue("name", activityToEdit.name)
+      setValue("description", activityToEdit.description)
+      setValue("location", activityToEdit.location)
+      setValue("starttime", activityToEdit.starttime)
+      setValue("endtime", activityToEdit.endtime)
+    }
+  },[]);
 
   return (
     <View>

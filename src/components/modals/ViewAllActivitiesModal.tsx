@@ -9,6 +9,7 @@ import GreenButton from '../GreenButton';
 import { Activity } from '../../api/models/Activity';
 import { User } from '../../api/models/User';
 import { deleteActivity } from '../../api/logic/ActivityLogic';
+import { format } from 'date-fns';
 
 export default function ViewAllActivitiesModal({handleModalClose, refetchActivities, activities, isVisible, currentUser} : {handleModalClose: () => void; refetchActivities: () => void; activities: Activity[]; isVisible: boolean; currentUser: User}) {
   const deleteAndRefresh = async (id: number) => {
@@ -28,9 +29,11 @@ export default function ViewAllActivitiesModal({handleModalClose, refetchActivit
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Text style={styles.goalItem}>{item.name}</Text>
               <Text>{item.description}</Text>
+              <Text>Start: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
+              <Text>End: {item.endtime ? format(new Date(item.endtime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
             </View>
             <Text style={[styles.goalItem, { color: item.teamid ? 'green' : 'blue' }]}>
-              {item.teamid ? 'Team Goal' : 'In Progress'}
+              {item.teamid ? 'Team Activity' : 'Your Activity'}
             </Text>
             <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
               <Text style={{color: 'white'}}>X</Text>
