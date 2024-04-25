@@ -6,10 +6,9 @@ import React, { Component, useState, useEffect } from 'react'
 import { Surface, Text } from 'react-native-paper';
 import { User } from '../api/models/User';
 import { Goal } from '../api/models/Goal';
-import { getAllGoals } from '../api/logic/GoalLogic';
+import { getAllGoals, updateGoal, deleteGoal, toggleGoalCompletion } from '../api/logic/GoalLogic';
 import GreenButton from '../components/GreenButton';
 import CreateGoalModal from '../components/modals/CreateGoalModal';
-import { deleteGoal } from '../api/logic/GoalLogic';
 import { getAllTeams } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 
@@ -54,6 +53,11 @@ export default function Goals({currentUser} : {currentUser : User}) {
       fetchGoals();
     }
 
+    const toggleCompleted = async (goal: Goal) => {
+      await toggleGoalCompletion(goal);
+      fetchGoals();
+    }
+
   return (
     <SafeAreaView style={styles.container}>
       <GreenButton text={currentUser.isCoach ? "Create Team Goal" : "Create Goal"} onPress={openModal}/>
@@ -65,7 +69,7 @@ export default function Goals({currentUser} : {currentUser : User}) {
            style={{margin: 10}}
            data={userGoals.filter(x => x.teamid === 0)}
            renderItem={({ item }) => (
-             <View style={styles.goalView}>
+             <TouchableOpacity style={styles.goalView} onPress={() => toggleCompleted(item)}>
                <View style={{alignItems: 'center', justifyContent: 'center'}}>
                  <Text style={styles.goalItem}>{item.name}</Text>
                  <Text>{item.description}</Text>
@@ -76,7 +80,7 @@ export default function Goals({currentUser} : {currentUser : User}) {
                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
                  <Text style={{color: 'white'}}>X</Text>
                </TouchableOpacity>
-             </View>
+             </TouchableOpacity>
            )}
            keyExtractor={item => item.id.toString()}
          />

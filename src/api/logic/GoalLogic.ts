@@ -111,6 +111,24 @@ export const updateGoal = async (goal: Goal): Promise<boolean> => {
     }
 };
 
+export const toggleGoalCompletion = async (goal: Goal): Promise<boolean> => {
+    try {
+        const response = await fetch(variables.API_URL + '/api/Goal/', {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(goal)
+        });
+
+        return response.ok;
+    } catch (error) {
+        console.error('error happened: ', error);
+        return false;
+    }
+};
+
 export const deleteGoal = async (id: number): Promise<boolean> => {
     try {
         const response = await fetch(variables.API_URL + '/api/Goal/' + id, {
