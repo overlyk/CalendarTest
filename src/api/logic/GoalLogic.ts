@@ -113,7 +113,7 @@ export const updateGoal = async (goal: Goal): Promise<boolean> => {
 
 export const toggleGoalCompletion = async (goal: Goal): Promise<boolean> => {
     try {
-        const response = await fetch(variables.API_URL + '/api/Goal/', {
+        const response = await fetch(variables.API_URL + '/api/Goal/toggle', {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
