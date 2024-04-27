@@ -1,9 +1,7 @@
-import * as React from 'react';
-import { TextInput, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { Activity } from '../api/models/Activity';
 import { View, StyleSheet } from 'react-native';
 import { format } from 'date-fns';
-import { useState } from 'react';
 
 export default function ActivityText({ activity } : { activity: Activity }) {
 

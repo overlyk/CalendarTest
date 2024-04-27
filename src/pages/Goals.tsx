@@ -1,9 +1,9 @@
-import { SafeAreaView, StyleSheet, View, FlatList, Modal, Button, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import React, { Component, useState, useEffect } from 'react'
-import { Surface, Text } from 'react-native-paper';
+import { SafeAreaView, StyleSheet, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react'
+import { Text } from 'react-native-paper';
 import { User } from '../api/models/User';
 import { Goal } from '../api/models/Goal';
-import { getAllGoals, updateGoal, deleteGoal, toggleGoalCompletion } from '../api/logic/GoalLogic';
+import { getAllGoals, deleteGoal, toggleGoalCompletion } from '../api/logic/GoalLogic';
 import GreenButton from '../components/GreenButton';
 import CreateGoalModal from '../components/modals/CreateGoalModal';
 import { getAllTeams } from '../api/logic/TeamLogic';
@@ -131,20 +131,19 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     flex: 10,
     justifyContent: 'space-evenly',
-    //alignContent: 'center',
     backgroundColor: '#f0f0f0', // Light gray background
  },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: 'green', // Green header text color
+    color: 'green', 
     textAlign: 'center',
   },
   bigHeader: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'green', // Green header text color
+    color: 'green', 
     textAlign: 'center',
   },
   goalView: {
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
   goalItem: {
     fontSize: 16,
     marginHorizontal: 5,
-    color: 'green', // Green goal text color
+    color: 'green',
   },
   deleteButton: {
     backgroundColor: 'red',

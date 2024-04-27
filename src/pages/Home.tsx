@@ -1,15 +1,12 @@
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import React, { Component, useCallback, useEffect, useState } from 'react'
-import { Button, List, Surface, Text } from 'react-native-paper';
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
+import  { useEffect, useState } from 'react'
+import { Text } from 'react-native-paper';
 import { User } from '../api/models/User';
 import { Game } from '../api/models/Game';
 import { Activity } from '../api/models/Activity';
 import { getAllActivities } from '../api/logic/ActivityLogic';
 import { getAllGames } from '../api/logic/GameLogic';
-import ActivityText from '../components/ActivityText';
-import GameText from '../components/GameText';
-import LogoutButton from '../components/LogoutButton';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import {Calendar } from 'react-native-calendars';
 import { getAllTeams } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 import { format } from 'date-fns';
@@ -200,19 +197,18 @@ export default function Home({currentUser} : {currentUser: User} ) {
     </View>
   );
 }
-//use these to style the components (similar to CSS)
+
 const styles = StyleSheet.create({
   container: {
      paddingTop: 20,
      flex: 10,
      justifyContent: 'space-evenly',
-     //alignContent: 'center',
      backgroundColor: '#f0f0f0', // Light gray background
   },
   goalItem: {
     fontSize: 16,
     marginHorizontal: 5,
-    color: 'green', // Green goal text color
+    color: 'green', 
   },
   goalView: {
     borderWidth: 1,
@@ -235,136 +231,26 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderRadius: 5,
   },
-  topContainer: {
-    flex: .25,
-    //alignContent: 'center',
-    backgroundColor: '#6FCA35'
- },
- header: {
-  fontSize: 24,
-  fontWeight: 'bold',
-  marginBottom: 5,
-  textAlign: 'center',
-  color: 'green', // Green header text color
-},
-header2: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  marginBottom: 2,
-  textAlign: 'center',
-  color: 'green', // Green header text color
-  textDecorationLine: 'underline'
-},
- accordianHeader: {
-    flex: .25,
-    //alignContent: 'center',
-    backgroundColor: '#468021'
- },
- scrollView: {
-  backgroundColor: '#f0f0f0', // Light gray background
-  marginHorizontal: 5,
-},
-  midContainer: {
-    flex: .25,
-    //alignContent: 'center',
-    backgroundColor: '#6FCA35'
- },
-  input: {
-     margin: 15,
-     
-     height: 40,
-     borderColor: '#7a42f4',
-     borderWidth: 1
-  },
-  submitButton: {
-     backgroundColor: 'green',
-     padding: 10,
-     margin: 15,
-     height: 40,
-  },
-  submitButtonText:{
-     color: 'white',
-     alignContent: 'center',
-     justifyContent: 'center',
-  },
-  debugText:{
-    color: 'white',
-    alignContent: 'center',
-    justifyContent: 'center',
- },
-  activityText:{
-    fontSize: 14,
-    color: 'blue',
-   // textAlign: 'center',
-  },
-  titleText:{
-    fontSize: 25,
-    flex: 1,
-    //color: 'green',
-    fontStyle: 'italic',
-   // textAlign: 'center',
-    textDecorationLine: 'underline',
-    },
-  headerText:{
-    fontSize: 35,
-    flex: .5,
-    //color: 'green',
-   // textAlign: 'center',
+  header: {
+    fontSize: 24,
     fontWeight: 'bold',
-    textDecorationLine: 'underline',
-    },
+    marginBottom: 5,
+    textAlign: 'center',
+    color: 'green',
+  },
+  header2: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 2,
+    textAlign: 'center',
+    color: 'green', 
+    textDecorationLine: 'underline'
+  },
+  scrollView: {
+    backgroundColor: '#f0f0f0', // Light gray background
+    marginHorizontal: 5,
+  },
   centerText:{
-    //fontSize: 35,
-    //color: 'green',
-   // textAlign: 'center',
-    //justifyContent: 'center',
     textAlign: 'center'
-    },
- surface: {
-    padding: 0,
-    height: 80,
-    width: 200,
-   // alignItems: 'center',
-    //justifyContent: 'center',
-    }});
-const background = StyleSheet.create({
-container: {
-flex: 1,
-backgroundColor: '#6FCA35',
-}
+  },
 });
-const styles2 = StyleSheet.create ({
-container: {
- flexDirection: 'column',
- justifyContent: 'center',
- alignItems: 'center',
- backgroundColor: 'grey',
- height: 600
-},
-redbox: {
- width: 100,
- height: 100,
- backgroundColor: 'red'
-},
-bluebox: {
- width: 100,
- height: 100,
- backgroundColor: 'blue'
-},
-blackbox: {
- width: 100,
- height: 100,
- backgroundColor: 'black'
-},
-
-
-});
-const styles3 = StyleSheet.create({
-surface: {
-padding: 8,
-height: 120,
-width: 400,
-backgroundColor: 'green',
-alignItems: 'center',
-justifyContent: 'center',
-}});

@@ -1,9 +1,6 @@
 //this is an example of a modal popup in react native
-import * as React from 'react';
-import { Modal, Portal, Text, PaperProvider, TextInput } from 'react-native-paper';
-import { TouchableOpacity, Button, View, StyleSheet } from 'react-native';
-import { createGoal } from '../../api/logic/GoalLogic';
-import { Goal } from '../../api/models/Goal';
+import { Modal, Portal, Text } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import GreenButton from '../GreenButton';
 import { createGame } from '../../api/logic/GameLogic';
@@ -27,9 +24,6 @@ export default function CreateGameModal({handleModalClose, fetchTeamGames, teams
         starttime: data.starttime,
         endtime: data.endtime
     }
-    console.log('New Game');
-    console.log('game: ', game);
-    console.log('data: ', data);
     await createGame(game);
     fetchTeamGames();
     handleModalClose();
@@ -198,10 +192,6 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#151E26',
       },
-      dropdownItemIconStyle: {
-        fontSize: 28,
-        marginRight: 8,
-      },
     container: {
       backgroundColor: 'white',
       padding: 10,
@@ -209,7 +199,6 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       height: 500
     },
-    
     input: {
       height: 40,
       borderColor: 'green',
@@ -217,27 +206,9 @@ const styles = StyleSheet.create({
       marginBottom: 10,
       paddingHorizontal: 10,
     },
-    submitButton: {
-       backgroundColor: 'green',
-       padding: 10,
-       margin: 15,
-       height: 40,
-    },
-    submitButtonText:{
-       color: 'white',
-       alignContent: 'center',
-       justifyContent: 'center',
-    },
     titleText:{
       fontSize: 30,
       color: 'green',
       textAlign: 'center'
     },
-    surface: {
-      padding: 8,
-      height: 80,
-      width: 80,
-      alignItems: 'center',
-      justifyContent: 'center',
-    }
   });

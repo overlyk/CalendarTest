@@ -1,11 +1,5 @@
-//this is an example of a modal popup in react native
-import * as React from 'react';
-import { Modal, Portal, Text, PaperProvider, TextInput } from 'react-native-paper';
-import { TouchableOpacity, Button, View, StyleSheet, FlatList} from 'react-native';
-import { createGoal } from '../api/logic/GoalLogic';
-import { Goal } from '../api/models/Goal';
-import {useForm, Controller} from 'react-hook-form';
-import GreenButton from './GreenButton';
+import {  Text } from 'react-native-paper';
+import { TouchableOpacity, View, StyleSheet, FlatList} from 'react-native';
 import { Activity } from '../api/models/Activity';
 import { User } from '../api/models/User';
 import { deleteActivity } from '../api/logic/ActivityLogic';
@@ -71,12 +65,6 @@ export default function ViewActivities({refetchActivities, activities, currentUs
   );
 };
 const styles = StyleSheet.create({
-      container: {
-        backgroundColor: 'white',
-        padding: 20,
-        margin: 20,
-        borderRadius: 10,
-      },
       header: {
         fontSize: 24,
         fontWeight: 'bold',

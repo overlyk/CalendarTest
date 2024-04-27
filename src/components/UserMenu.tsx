@@ -1,7 +1,5 @@
-import * as React from 'react';
 import { useState } from 'react';
-import { View } from 'react-native';
-import { Button, Menu, Divider, PaperProvider, IconButton } from 'react-native-paper';
+import { Menu, IconButton } from 'react-native-paper';
 
 export default function UserMenu({handleLogout} : {handleLogout: () => void}) {
     const [visible, setVisible] = useState(false);

@@ -1,6 +1,4 @@
-import * as React from 'react';
-import { TextInput, Text } from 'react-native-paper';
-import { Activity } from '../api/models/Activity';
+import {  Text } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import { Game } from '../api/models/Game';
 import { format } from 'date-fns';

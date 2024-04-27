@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { variables } from "../../common/Variables";
 import { Activity } from "../models/Activity";
 
@@ -62,7 +61,6 @@ export const getAllActivities = async (): Promise<Activity[] | null> => {
     }
 };
 export const createActivity = async (activity: Activity): Promise<boolean> => {
-    //console.log('test '  + user.username + ' ' + user.password + ' ' + user.firstname + ' ' + user.lastname + ' ' + user.TeamId + ' ' + user.isCoach);
     try {
         const response = await fetch(variables.API_URL + '/api/Activity/activity', {
             method: 'POST',
@@ -82,11 +80,8 @@ export const createActivity = async (activity: Activity): Promise<boolean> => {
             })
         });
         const json = await response.json();
-        console.log('test '  + response.url);
-        console.log('test '  + response.status);
         return response.ok;
     } catch (error) {
-        console.log('test error '  + error);
         console.error('error happened: ', error);
         return false;
     }

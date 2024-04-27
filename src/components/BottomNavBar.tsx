@@ -1,10 +1,4 @@
-//this is the bottom navigation bar that is displayed on the bottom of the screen
-import * as React from 'react';
-import { BottomNavigation, Text } from 'react-native-paper';
-import SecondMenu from '../pages/Goals';
-import MainMenu from '../pages/Home';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Login from '../pages/Login';
+import { BottomNavigation } from 'react-native-paper';
 import Goals from '../pages/Goals';
 import Home from '../pages/Home';
 import Activities from '../pages/Activities';

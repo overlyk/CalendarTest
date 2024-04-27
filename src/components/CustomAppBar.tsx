@@ -1,7 +1,7 @@
-import * as React from 'react';
+
 import { Appbar } from 'react-native-paper';
 import { Platform } from 'react-native';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import UserMenu from './UserMenu';
 export default function CustomAppBar({handleLogout} : {handleLogout:  () => void}) {

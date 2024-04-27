@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { variables } from "../../common/Variables";
 import { User } from "../models/User";
 
@@ -12,7 +11,6 @@ export const getUser = async (userId: number): Promise<User | null> => {
             },
         });
         const json = await response.json();
-        // Assuming the JSON directly contains the user properties
         const user: User = {
             id: json.id,
             username: json.username,
@@ -39,9 +37,7 @@ export const getAllUsers = async (): Promise<User[] | null> => {
                 'Content-Type': 'application/json'
             },
         });
-        //parse the response into a json object
         const json = await response.json();
-        //"map" the objects to an array
         const users: User[] = json.map((user: User) => {
             return {
                 id: user.id,
@@ -73,11 +69,6 @@ export const loginUser = async (username: string, password: string): Promise<Use
                 password: password
             })
         });
-
-        // if (!response.ok) {
-        //     throw new Error('Network response was not ok');
-        // }
-
         const json = await response.json();
         const user: User = {
             id: json.id,
@@ -98,13 +89,11 @@ export const loginUser = async (username: string, password: string): Promise<Use
             return null;
         }
     } catch (error) {
-        console.log('test login error '  + error);
         console.error('error happened: ', error);
         return null;
     }
 };
 export const createUser = async (user: User): Promise<boolean> => {
-    console.log('test '  + user.username + ' ' + user.password + ' ' + user.firstname + ' ' + user.lastname + ' ' + user.TeamId + ' ' + user.isCoach);
     try {
         const response = await fetch(variables.API_URL + '/api/User/user', {
             method: 'POST',
@@ -123,11 +112,8 @@ export const createUser = async (user: User): Promise<boolean> => {
             })
         });
         const json = await response.json();
-        console.log('test '  + response.url);
-        console.log('test '  + response.status);
         return response.ok;
     } catch (error) {
-        console.log('test error '  + error);
         console.error('error happened: ', error);
         return false;
     }

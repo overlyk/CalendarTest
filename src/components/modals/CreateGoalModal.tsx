@@ -1,7 +1,5 @@
-//this is an example of a modal popup in react native
-import * as React from 'react';
-import { Modal, Portal, Text, PaperProvider, TextInput } from 'react-native-paper';
-import { TouchableOpacity, Button, View, StyleSheet } from 'react-native';
+import { Modal, Portal, Text, TextInput } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
 import { createGoal } from '../../api/logic/GoalLogic';
 import { Goal } from '../../api/models/Goal';
 import {useForm, Controller} from 'react-hook-form';
@@ -10,7 +8,6 @@ import { User } from '../../api/models/User';
 
 export default function CreateGoalModal({handleModalClose, fetchGoals, isVisible, currentUser} : {handleModalClose: () => void; fetchGoals: () => void; isVisible: boolean; currentUser: User}) {
   const { control, handleSubmit, formState: { errors } } = useForm<Goal>();
-	
   const onSubmit = async (data) => {
     const goal = 
       currentUser.isCoach && currentUser.TeamId ?

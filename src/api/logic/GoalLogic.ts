@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { variables } from "../../common/Variables";
 import { Goal } from "../models/Goal";
 
@@ -12,9 +11,6 @@ export const getGoal = async (goalId: number): Promise<Goal | null> => {
             },
         });
         const json = await response.json();
-        // Assuming the JSON directly contains the user properties
-
-        //TODO - update properties for goals
         const goal: Goal = {
             id: json.id,
             userid: json.userid,
@@ -30,7 +26,6 @@ export const getGoal = async (goalId: number): Promise<Goal | null> => {
         return null;
     }
 };
-
 export const getAllGoals = async (): Promise<Goal[] | null> => {
     try {
         const response = await fetch(variables.API_URL + '/api/Goal/', {
@@ -40,11 +35,7 @@ export const getAllGoals = async (): Promise<Goal[] | null> => {
                 'Content-Type': 'application/json'
             },
         });
-        //parse the response into a json object
         const json = await response.json();
-        //"map" the objects to an array
-
-        //TODO-UPDATE properities here
         const goals: Goal[] = json.map((goal: Goal) => {
             return {
                 id: goal.id,
@@ -63,7 +54,6 @@ export const getAllGoals = async (): Promise<Goal[] | null> => {
 };
 
 export const createGoal = async (goal: Goal): Promise<boolean> => {
-   // console.log('test '  + user.username + ' ' + user.password + ' ' + user.firstname + ' ' + user.lastname + ' ' + user.TeamId + ' ' + user.isCoach);
     try {
         const response = await fetch(variables.API_URL + '/api/Goal/goal', {
             method: 'POST',
@@ -71,8 +61,6 @@ export const createGoal = async (goal: Goal): Promise<boolean> => {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
             },
-
-            //todo UPDATE PROPERTIES
             body: JSON.stringify({
                 id: 0,
                 userid: goal.userid,
@@ -83,11 +71,8 @@ export const createGoal = async (goal: Goal): Promise<boolean> => {
             })
         });
         const json = await response.json();
-        console.log('test '  + response.url);
-        console.log('test '  + response.status);
         return response.ok;
     } catch (error) {
-        console.log('test error '  + error);
         console.error('error happened: ', error);
         return false;
     }

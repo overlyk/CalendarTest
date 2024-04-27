@@ -1,5 +1,5 @@
-import { Modal, Portal, Text, PaperProvider, TextInput } from 'react-native-paper';
-import { TouchableOpacity, Button, View, StyleSheet } from 'react-native';
+import { Modal, Portal, Text, TextInput } from 'react-native-paper';
+import { Button, View, StyleSheet } from 'react-native';
 import { createUser } from '../../api/logic/UserLogic';
 import { User } from '../../api/models/User';
 import {useForm, Controller} from 'react-hook-form';

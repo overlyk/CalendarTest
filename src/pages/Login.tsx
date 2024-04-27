@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-
-import { View, Text, Button, ActivityIndicator, StyleSheet, TouchableOpacity  } from 'react-native';
-import { getUser, createUser, getAllUsers, loginUser } from '../api/logic/UserLogic';
+import { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity  } from 'react-native';
+import { loginUser } from '../api/logic/UserLogic';
 import { User } from '../api/models/User';
 import { Surface, TextInput } from 'react-native-paper';
 import CreateUserModal from '../components/modals/CreateUserModal';
@@ -11,6 +10,7 @@ export default function Login( { handleLogin } : { handleLogin: (user: User) => 
     const [inputPassword, setInputPassword] = useState('');
     const [loginError, setLoginError] = useState('');
     const [toastMessage, setToastMessage] = useState('');
+
     //function to handle logging in user
     const authenticateUser = async () => {
       const user = await loginUser(inputUsername, inputPassword); //calls API to see if user exists and authenticated
@@ -36,7 +36,7 @@ export default function Login( { handleLogin } : { handleLogin: (user: User) => 
          }
     }
 
-    //this is what is displayed on the screen
+
     return (
      <View style = {styles.container}>
          {showCreateUserModal ? <CreateUserModal handleCreateUser={handleCreateUser} handleModalClose={() => setCreateUserModal(false)} /> : null}
