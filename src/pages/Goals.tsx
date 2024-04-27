@@ -58,7 +58,7 @@ export default function Goals({currentUser} : {currentUser : User}) {
   return (
     <SafeAreaView style={styles.container}>
       <GreenButton text={currentUser.isCoach ? "Create Team Goal" : "Create Goal"} onPress={openModal}/>
-      <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} userId={currentUser.id}></CreateGoalModal>
+      <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} currentUser={currentUser}></CreateGoalModal>
      {!currentUser.isCoach ? 
      <>
             <Text style={styles.header}>{`${currentUser.firstname}'s Goals`}</Text>

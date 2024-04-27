@@ -6,21 +6,30 @@ import { createGoal } from '../../api/logic/GoalLogic';
 import { Goal } from '../../api/models/Goal';
 import {useForm, Controller} from 'react-hook-form';
 import GreenButton from '../GreenButton';
+import { User } from '../../api/models/User';
 
-export default function CreateGoalModal({handleModalClose, fetchGoals, isVisible, userId} : {handleModalClose: () => void; fetchGoals: () => void; isVisible: boolean; userId: number}) {
+export default function CreateGoalModal({handleModalClose, fetchGoals, isVisible, currentUser} : {handleModalClose: () => void; fetchGoals: () => void; isVisible: boolean; currentUser: User}) {
   const { control, handleSubmit, formState: { errors } } = useForm<Goal>();
 	
   const onSubmit = async (data) => {
-    const goal = {
-      id: 0,
-      userid: userId,
-      name: data.name,
-      description: data.description,
-      isCompleted: false,
-      teamid: 0
-    }
-
-    console.log('New Goal');
+    const goal = 
+      currentUser.isCoach && currentUser.TeamId ?
+      {
+        id: 0,
+        userid: currentUser.id,
+        name: data.name,
+        description: data.description,
+        isCompleted: false,
+        teamid: data.teamid
+      } : 
+      {
+        id: 0,
+        userid: currentUser.id,
+        name: data.name,
+        description: data.description,
+        isCompleted: false,
+        teamid: 0
+      }
 	  await createGoal(goal);
     fetchGoals();
     handleModalClose();

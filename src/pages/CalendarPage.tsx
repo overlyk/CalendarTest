@@ -20,12 +20,12 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
   const [userGames, setUserGames] = useState<Game[]>([]);
   const [teamsList, setTeamsList] = useState<Team[]>([]);
   const [viewModalVisible, setViewModalVisible] = useState(false);
+  const [gameDayList, setGameDayList] = useState<string[]>([]);
+  const [activityDayList, setActivityDayList] = useState<string[]>([]);
   const [createModalVisible, setCreateModalVisible] = useState(false);
-  const [activityDateList, setActivityDateList] = useState<string[]>([]);
-  const [gameDateList, setGameDateList] = useState<string[]>([]);
-  const [currentDates, setCurrentDates] = useState({});
-  const [hasGame, setHasGame] = useState([]);
   const currentUserTeam = teamsList.find(team => team.id === currentUser.TeamId);
+  let currentGames = {};
+  let currentActivities = {};
 
   const fetchTeams = async () => {
     const allTeams = await getAllTeams();
@@ -34,15 +34,13 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
     }
   };
 
-
-
   const fetchActivities = async () => {
     const allActivities = await getAllActivities();
     if (allActivities) {
       const filteredActivities = allActivities.filter(activity => activity.userid === currentUser.id || activity.teamid === currentUser.TeamId)
       setUserActivities(filteredActivities);
-      setActivityDateList(filteredActivities.map(activity => format(new Date(activity.starttime), 'yyyy-MM-dd')));
-      console.log("activities: " + filteredActivities);
+      const activityDays = filteredActivities.map(activity => format(new Date(activity.starttime), 'yyyy-MM-dd'));
+      setActivityDayList(activityDays);
     }
   };
   const fetchGames = async () => {
@@ -50,21 +48,24 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
     if (allGames) {
       const filteredGames = allGames.filter(game => (game.hometeamid == currentUser.TeamId) || (game.awayteamid == currentUser.TeamId));
       setUserGames(filteredGames);
-      setGameDateList(filteredGames.map(game => format(new Date(game.starttime), 'yyyy-MM-dd')));
-      console.log("games " + filteredGames);
-      setCurrentDates(() => {
-        let dates = {};
-        activityDateList.forEach(date => {
-          dates[date] = { marked: true, dotColor: 'blue' }
-        });
-        gameDateList.forEach(date => {
-          dates[date] = { marked: true, dotColor: 'red' }
-        });
-        return dates;
-      });
-      console.log(currentDates.toString());
+      const gameDays = filteredGames.map(game => format(new Date(game.starttime), 'yyyy-MM-dd'));
+      setGameDayList(gameDays);
     }
   };
+
+  gameDayList.forEach((day) => {
+    currentGames[day] = {
+        selected: true,
+        marked: true,
+        selectedColor: 'purple'
+    }});
+
+  activityDayList.forEach((day) => {
+    currentActivities[day] = {
+        selected: true,
+        marked: true,
+        selectedColor: 'green'
+    }});
 
   useEffect(() => {
     fetchActivities();
@@ -86,9 +87,11 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
             setSelected(day.dateString);
           }}
           markedDates={{
-            currentDates,
-            //['2024-04-17']: {marked: true, selectedColor: 'orange'},
-            [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'}
+            ...currentGames,
+            ...currentActivities,
+            [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'},
+            
+
           }}
         />
           <View>
@@ -247,44 +250,3 @@ const styles = StyleSheet.create({
    // alignItems: 'center',
     //justifyContent: 'center',
     }});
-const background = StyleSheet.create({
-container: {
-flex: 1,
-backgroundColor: '#6FCA35',
-}
-});
-const styles2 = StyleSheet.create ({
-container: {
- flexDirection: 'column',
- justifyContent: 'center',
- alignItems: 'center',
- backgroundColor: 'grey',
- height: 600
-},
-redbox: {
- width: 100,
- height: 100,
- backgroundColor: 'red'
-},
-bluebox: {
- width: 100,
- height: 100,
- backgroundColor: 'blue'
-},
-blackbox: {
- width: 100,
- height: 100,
- backgroundColor: 'black'
-},
-
-
-});
-const styles3 = StyleSheet.create({
-surface: {
-padding: 8,
-height: 120,
-width: 400,
-backgroundColor: 'green',
-alignItems: 'center',
-justifyContent: 'center',
-}});
