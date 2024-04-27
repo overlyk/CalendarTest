@@ -1,6 +1,3 @@
-///this will show the Goals screen
-//Split into Team Goals and User Goals
-
 import { SafeAreaView, StyleSheet, View, FlatList, Modal, Button, TextInput, TouchableOpacity } from 'react-native';
 import React, { Component, useState, useEffect } from 'react'
 import { Surface, Text } from 'react-native-paper';

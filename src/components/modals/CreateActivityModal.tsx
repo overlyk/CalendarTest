@@ -73,7 +73,7 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
                 <TextInput
                   placeholder="Activity Name"
                   onBlur={onBlur}
-                  onSelectionChange={onChange}
+                  onChangeText={onChange}
                   value={value}
                 />
               )}

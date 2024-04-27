@@ -3,21 +3,21 @@ import { TouchableOpacity, Button, View, StyleSheet } from 'react-native';
 import { createUser } from '../../api/logic/UserLogic';
 import { User } from '../../api/models/User';
 import {useForm, Controller} from 'react-hook-form';
-export default function CreateUserModal({handleModalClose} : {handleModalClose: () => void}) {
+export default function CreateUserModal({handleModalClose, handleCreateUser} : {handleCreateUser: (success: boolean) => void, handleModalClose: () => void}) {
   const containerStyle = {backgroundColor: 'white', padding: 0};
   const { control, handleSubmit, formState: { errors } } = useForm<User>();
-	const onSubmit = (data) => {
+	const onSubmit = async (data) => {
         const user  = {
           id: 0,
           username: data.username,
           password: data.password,
-          firstname: "test",
-          lastname: "ing",
+          firstname: data.firstname,
+          lastname: data.lastname,
           isCoach: false,
-          TeamId: 1
+          TeamId: 0
         }
-      console.log('New User');
-			createUser(user);
+			const success = await createUser(user);
+      handleCreateUser(success);
       handleModalClose();
 	};
   return (
@@ -58,6 +58,41 @@ export default function CreateUserModal({handleModalClose} : {handleModalClose: 
               name="password"
             />
             {errors.password && <Text>This is required.</Text>}
+
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 100,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="First Name"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="firstname"
+            />
+            {errors.firstname && <Text>This is required.</Text>}
+
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 100,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="Last Name"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="lastname"
+            />
+            {errors.lastname && <Text>This is required.</Text>}
+            
          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
          <Button title="Cancel" onPress={handleModalClose} />
         </Modal>

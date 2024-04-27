@@ -1,4 +1,3 @@
-//this will be the initial Login page of the app
 import React, { useEffect, useState } from 'react';
 
 import { View, Text, Button, ActivityIndicator, StyleSheet, TouchableOpacity  } from 'react-native';
@@ -7,31 +6,47 @@ import { User } from '../api/models/User';
 import { Surface, TextInput } from 'react-native-paper';
 import CreateUserModal from '../components/modals/CreateUserModal';
 export default function Login( { handleLogin } : { handleLogin: (user: User) => void}) {
-    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [showCreateUserModal, setCreateUserModal] = useState(false);
     const [inputUsername, setInputUsername] = useState('');
     const [inputPassword, setInputPassword] = useState('');
+    const [loginError, setLoginError] = useState('');
+    const [toastMessage, setToastMessage] = useState('');
     //function to handle logging in user
     const authenticateUser = async () => {
-      console.log(inputUsername, inputPassword);
       const user = await loginUser(inputUsername, inputPassword); //calls API to see if user exists and authenticated
-      console.log("user object returned as: " + user);
         if (user) 
         {
-            console.log('Login successful');
             handleLogin(user);
+            setLoginError('');
         } else {
-            console.log('Login failed');
+            setToastMessage('');
+            setLoginError('Invalid username or password');
         }
     };
+
+    const handleCreateUser = async (success: boolean) => {
+         if (success) {
+            setToastMessage('User created successfully');
+            setLoginError('');
+            setCreateUserModal(false);
+         }
+         else {
+            setLoginError('Error creating user');
+            setCreateUserModal(false);
+         }
+    }
+
     //this is what is displayed on the screen
     return (
      <View style = {styles.container}>
-         {showLoginModal ? <CreateUserModal handleModalClose={() => setShowLoginModal(false)} /> : null}
+         {showCreateUserModal ? <CreateUserModal handleCreateUser={handleCreateUser} handleModalClose={() => setCreateUserModal(false)} /> : null}
          <Surface>
             <Text style ={styles.titleText}>       PHEONIX FITNESS</Text>
+            {loginError ? <Text style={styles.errorText}>{loginError}</Text> : null}
+            {toastMessage ? <Text style={styles.toastText}>{toastMessage}</Text> : null}
             <TextInput style = {styles.input}
                underlineColorAndroid = "transparent"
-               placeholder = "Email"
+               placeholder = "Username"
                placeholderTextColor = "#9a73ef"
                autoCapitalize = "none"
                onChangeText = {setInputUsername}/>
@@ -48,7 +63,7 @@ export default function Login( { handleLogin } : { handleLogin: (user: User) => 
             </TouchableOpacity>
             <TouchableOpacity
                style = {styles.submitButton}
-               onPress = {() => setShowLoginModal(true)}>
+               onPress = {() => setCreateUserModal(true)}>
                <Text style = {styles.submitButtonText}>                                       Sign Up </Text>
             </TouchableOpacity>
 
@@ -92,5 +107,17 @@ const styles = StyleSheet.create({
       width: 80,
       alignItems: 'center',
       justifyContent: 'center',
-      }
+      },
+   errorText:{
+      fontSize: 14,
+      color: 'red',
+      alignContent: 'center',
+      justifyContent: 'center',
+      },
+   toastText:{
+      fontSize: 14,
+      color: 'green',
+      alignContent: 'center',
+      justifyContent: 'center',
+      },
  })
