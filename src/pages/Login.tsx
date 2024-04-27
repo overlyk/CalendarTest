@@ -77,6 +77,9 @@ const styles = StyleSheet.create({
        paddingTop: 220,
        alignContent: 'center',
     },
+    centerText: {
+      textAlign: 'center',
+    },
     input: {
        margin: 15,
        
@@ -113,11 +116,13 @@ const styles = StyleSheet.create({
       color: 'red',
       alignContent: 'center',
       justifyContent: 'center',
+      textAlign: 'center',
       },
    toastText:{
       fontSize: 14,
       color: 'green',
       alignContent: 'center',
       justifyContent: 'center',
+      textAlign: 'center',
       },
  })

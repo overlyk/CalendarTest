@@ -20,7 +20,6 @@ export default function UserMenu({handleLogout} : {handleLogout: () => void}) {
           ></IconButton>
         }
       >
-        <Menu.Item onPress={() => {}} title="Settings" />
         <Menu.Item onPress={handleLogout} title="Logout" />
       </Menu>
     );
