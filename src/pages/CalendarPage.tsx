@@ -18,6 +18,8 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
   const [selected, setSelected] = useState('');
   const [userActivities, setUserActivities] = useState<Activity[]>([]);
   const [userGames, setUserGames] = useState<Game[]>([]);
+  const [userGamesPerDay, setUserGamesPerDay] = useState<Game[]>([]);
+  const [userActivitiesPerDay, setUserActivitiesPerDay] = useState<Activity[]>([]);
   const [teamsList, setTeamsList] = useState<Team[]>([]);
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [gameDayList, setGameDayList] = useState<string[]>([]);
@@ -73,6 +75,10 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
     fetchTeams();
   }, [])
 
+  useEffect(() => {
+    setUserGamesPerDay(userGames.filter(userGames => new Date(userGames.starttime).getDate() - 1 == new Date(selected).getDate() && new Date(userGames.starttime).getMonth() == new Date(selected).getMonth() && new Date(userGames.starttime).getFullYear() == new Date(selected).getFullYear()))
+    setUserActivitiesPerDay(userActivities.filter(activity => new Date(activity.starttime).getDate() - 1 == new Date(selected).getDate() && new Date(activity.starttime).getMonth() == new Date(selected).getMonth() && new Date(activity.starttime).getFullYear() == new Date(selected).getFullYear()))
+},[selected])
   return (
     <View style={styles.container}>
        <ScrollView style={styles.scrollView}>
@@ -97,9 +103,10 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
           <View>
             <Text style={styles.header}>Activities</Text>
             <View>
+            {userActivitiesPerDay.length > 0 ?
               <FlatList
                 style={{margin: 10}}
-                data={userActivities.filter(activity => new Date(activity.starttime).getDate() - 1 == new Date(selected).getDate() && new Date(activity.starttime).getMonth() == new Date(selected).getMonth() && new Date(activity.starttime).getFullYear() == new Date(selected).getFullYear())}
+                data={userActivitiesPerDay}
                 scrollEnabled={false}
                 renderItem={({ item }) => (
                   <View style={styles.goalView}>
@@ -113,13 +120,14 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
                   </View>
                 )}
                 keyExtractor={item => item.id.toString()}
-              />
+              /> : <Text style={styles.centerText}>No Activities Today</Text>}
             </View>
-            <Text style={styles.header}>Next Games In Schedule!</Text>
+            <Text style={styles.header}>Games Today</Text>
             <View>
+              {userGamesPerDay.length > 0 ? 
               <FlatList
                 style={{margin: 10}}
-                data={userGames.filter(userGames => new Date(userGames.starttime).getDate() - 1 == new Date(selected).getDate() && new Date(userGames.starttime).getMonth() == new Date(selected).getMonth() && new Date(userGames.starttime).getFullYear() == new Date(selected).getFullYear())}
+                data={userGamesPerDay}
                 scrollEnabled={false}
                 renderItem={({ item }) => (
                   <View style={styles.goalView}>
@@ -136,7 +144,7 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
                   </View>
                 )}
                 keyExtractor={item => item.id.toString()}
-              />
+              /> : <Text style={styles.centerText}>No Games Today</Text>}
             </View>
           </View>
         </ScrollView>
@@ -160,6 +168,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  centerText:{
+    textAlign: 'center',
+    marginBottom: 10
   },
   goalItem: {
     fontSize: 16,
@@ -235,13 +247,6 @@ const styles = StyleSheet.create({
    // textAlign: 'center',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-    },
-  centerText:{
-    //fontSize: 35,
-    //color: 'green',
-   // textAlign: 'center',
-    //justifyContent: 'center',
-    flex: 1,
     },
  surface: {
     padding: 0,

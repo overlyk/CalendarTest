@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     color: 'green',
     alignContent: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
   },
   surface: {
     padding: 8,

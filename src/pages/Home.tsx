@@ -105,8 +105,7 @@ const styles = StyleSheet.create({
  header: {
   fontSize: 24,
   fontWeight: 'bold',
-  marginBottom: 5,
-  marginTop: -5,
+  marginBottom: 10,
   textAlign: 'center',
   color: 'green', // Green header text color
 },

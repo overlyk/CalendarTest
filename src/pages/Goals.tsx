@@ -61,8 +61,8 @@ export default function Goals({currentUser} : {currentUser : User}) {
     }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Goals</Text>
+    <SafeAreaView style={styles.container2}>
+      <Text style={styles.bigHeader}>Goals</Text>
       <GreenButton text={currentUser.isCoach ? "Create Team Goal" : "Create Goal"} onPress={openModal}/>
       <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} currentUser={currentUser}></CreateGoalModal>
      {!currentUser.isCoach ? 
@@ -121,11 +121,25 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f0f0f0', // Light gray background
   },
+  container2: {
+    paddingTop: 20,
+    flex: 10,
+    justifyContent: 'space-evenly',
+    //alignContent: 'center',
+    backgroundColor: '#f0f0f0', // Light gray background
+ },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
     color: 'green', // Green header text color
+    textAlign: 'center',
+  },
+  bigHeader: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'green', // Green header text color
+    textAlign: 'center',
   },
   goalView: {
     borderWidth: 1,

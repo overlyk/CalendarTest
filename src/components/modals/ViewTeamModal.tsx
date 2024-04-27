@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         color: 'green', // Green header text color
+        textAlign: 'center',
       },
       dropdownButtonStyle: {
         width: 350,
