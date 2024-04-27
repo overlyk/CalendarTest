@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View, FlatList, Modal, Button, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, View, FlatList, Modal, Button, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import React, { Component, useState, useEffect } from 'react'
 import { Surface, Text } from 'react-native-paper';
 import { User } from '../api/models/User';
@@ -62,54 +62,59 @@ export default function Goals({currentUser} : {currentUser : User}) {
 
   return (
     <SafeAreaView style={styles.container2}>
-      <Text style={styles.bigHeader}>Goals</Text>
-      <GreenButton text={currentUser.isCoach ? "Create Team Goal" : "Create Goal"} onPress={openModal}/>
-      <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} currentUser={currentUser}></CreateGoalModal>
-     {!currentUser.isCoach ? 
-     <>
-     <Text style={styles.header}>{`${currentUser.firstname}'s Goals`}</Text>
-           <FlatList
-           style={{margin: 10}}
-           data={userGoals.filter(x => x.teamid === 0)}
-           renderItem={({ item }) => (
-             <TouchableOpacity style={styles.goalView} onPress={() => toggleCompleted(item)}>
-               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                 <Text style={styles.goalItem}>{item.name}</Text>
-                 <Text>{item.description}</Text>
-               </View>
-               <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
-                 {item.isCompleted ? 'Complete' : 'In Progress'}
-               </Text>
-               <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
-                 <Text style={{color: 'white'}}>X</Text>
-               </TouchableOpacity>
-             </TouchableOpacity>
-           )}
-           keyExtractor={item => item.id.toString()}
-         />
-     </>
-         : null }
-      <Text style={styles.header}>{`${currentTeam.name}'s Goals`}</Text>
-      <FlatList
-        style={{margin: 10}}
-        data={userGoals.filter(x => x.teamid != 0)}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.goalView} onPress={() => toggleTeamGoalCompleted(item)}>
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={styles.goalItem}>{item.name}</Text>
-              <Text>{item.description}</Text>
-            </View>
-            <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
-              {item.isCompleted ? 'Complete' : 'In Progress'}
-            </Text>
-            { currentUser.isCoach ? 
-            <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
-              <Text style={{color: 'white'}}>X</Text>
-            </TouchableOpacity> : null }
-          </TouchableOpacity>
-        )}
-        keyExtractor={item => item.id.toString()}
-      />
+      <ScrollView>
+        <Text style={styles.bigHeader}>Goals</Text>
+        <GreenButton text={currentUser.isCoach ? "Create Team Goal" : "Create Goal"} onPress={openModal}/>
+        <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} currentUser={currentUser}></CreateGoalModal>
+
+        {!currentUser.isCoach ? 
+        <>
+        <Text style={styles.header}>{`${currentUser.firstname}'s Goals`}</Text>
+              <FlatList
+              style={{margin: 10}}
+              scrollEnabled={false}
+              data={userGoals.filter(x => x.teamid === 0)}
+              renderItem={({ item }) => (
+                <TouchableOpacity style={styles.goalView} onPress={() => toggleCompleted(item)}>
+                  <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style={styles.goalItem}>{item.name}</Text>
+                    <Text>{item.description}</Text>
+                  </View>
+                  <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
+                    {item.isCompleted ? 'Complete' : 'In Progress'}
+                  </Text>
+                  <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+                    <Text style={{color: 'white'}}>X</Text>
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              )}
+              keyExtractor={item => item.id.toString()}
+            />
+        </>
+            : null }
+          <Text style={styles.header}>{`${currentTeam.name}'s Goals`}</Text>
+          <FlatList
+            style={{margin: 10}}
+            scrollEnabled={false}
+            data={userGoals.filter(x => x.teamid != 0)}
+            renderItem={({ item }) => (
+              <TouchableOpacity style={styles.goalView} onPress={() => toggleTeamGoalCompleted(item)}>
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <Text style={styles.goalItem}>{item.name}</Text>
+                  <Text>{item.description}</Text>
+                </View>
+                <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
+                  {item.isCompleted ? 'Complete' : 'In Progress'}
+                </Text>
+                { currentUser.isCoach ? 
+                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+                  <Text style={{color: 'white'}}>X</Text>
+                </TouchableOpacity> : null }
+              </TouchableOpacity>
+            )}
+            keyExtractor={item => item.id.toString()}
+          />
+      </ScrollView>
     </SafeAreaView>
   );
 }

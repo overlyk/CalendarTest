@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Login from '../pages/Login';
 import Goals from '../pages/Goals';
 import Home from '../pages/Home';
-import CalendarPage from '../pages/CalendarPage';
+import Activities from '../pages/Activities';
 import Teams from '../pages/Teams';
 import { User } from '../api/models/User';
 import { useState } from 'react';
@@ -17,7 +17,7 @@ export default function BottomNavBar({currentUser} : {currentUser: User} ) {
   const HomeRoute = () => <Home currentUser={currentUser}/>;
   const GoalsRoute = () => <Goals currentUser={currentUser}/>;
   const TeamRoute = () => <Teams currentUser={currentUser}/>;
-  const NotificationsRoute = () => <CalendarPage currentUser={currentUser}/>;
+  const NotificationsRoute = () => <Activities currentUser={currentUser}/>;
 
   const [routes] = useState([
     { key: 'home', title: 'Home', focusedIcon: 'home'},

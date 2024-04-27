@@ -12,9 +12,9 @@ import { getAllTeams } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 import CreateActivityModal from '../components/modals/CreateActivityModal';
 import GreenButton from '../components/GreenButton';
-import ViewAllActivitiesModal from '../components/modals/ViewAllActivitiesModal';
+import ViewAllActivitiesModal from '../components/ViewActivities';
 
-export default function CalendarPage({currentUser} : {currentUser: User} ) {
+export default function Activities({currentUser} : {currentUser: User} ) {
   const [selected, setSelected] = useState('');
   const [userActivities, setUserActivities] = useState<Activity[]>([]);
   const [userGames, setUserGames] = useState<Game[]>([]);
@@ -81,73 +81,12 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
 },[selected])
   return (
     <View style={styles.container}>
-       <ScrollView style={styles.scrollView}>
-        <Text style={styles.header}>{currentUser.isCoach ? `${currentUserTeam?.name}'s Calendar` : `${currentUser.firstname}'s Calendar`}</Text>
-        <Text style={styles.header}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.header}>Activities</Text>
         <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setCreateModalVisible(true)}/>
-        <GreenButton text={currentUser.isCoach ? "View Team Activities" : "View Activities"} onPress={() => setViewModalVisible(true)}/>
-        <ViewAllActivitiesModal handleModalClose={() => setViewModalVisible(false)} refetchActivities={fetchActivities} activities={userActivities} isVisible={viewModalVisible} currentUser={currentUser} currentTeam={currentUserTeam}/>
         <CreateActivityModal handleModalClose={() => setCreateModalVisible(false)} fetchActivities={fetchActivities} isVisible={createModalVisible} user={currentUser}/>
-        <Calendar
-          onDayPress={day => {
-            setSelected(day.dateString);
-          }}
-          markedDates={{
-            ...currentGames,
-            ...currentActivities,
-            [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'},
-            
-
-          }}
-        />
-          <View>
-            <Text style={styles.header}>Activities Today</Text>
-            <View>
-            {userActivitiesPerDay.length > 0 ?
-              <FlatList
-                style={{margin: 10}}
-                data={userActivitiesPerDay}
-                scrollEnabled={false}
-                renderItem={({ item }) => (
-                  <View style={styles.goalView}>
-                    <View>
-                      <Text>testest</Text>
-                      <Text style={styles.goalItem}>{item.name}</Text>
-                      <Text>{item.description}</Text>
-                      <Text>Date: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
-                      <Text>Time: {item.starttime ? format(new Date(item.starttime + 'Z'), 'hh:mm'): null}</Text>
-                    </View>
-                  </View>
-                )}
-                keyExtractor={item => item.id.toString()}
-              /> : <Text style={styles.centerText}>No Activities Today</Text>}
-            </View>
-            <Text style={styles.header}>Games Today</Text>
-            <View>
-              {userGamesPerDay.length > 0 ? 
-              <FlatList
-                style={{margin: 10}}
-                data={userGamesPerDay}
-                scrollEnabled={false}
-                renderItem={({ item }) => (
-                  <View style={styles.goalView}>
-                    <View>
-                      <Text style={styles.goalItem}>
-                      HOME TEAM - {teamsList.find(team => team.id === item.hometeamid)?.name}
-                      </Text>
-                      <Text style={styles.goalItem}>
-                      AWAY TEAM  - {teamsList.find(team => team.id === item.awayteamid)?.name}
-                      </Text>
-                      <Text>Date: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
-                      <Text>Time: {item.starttime ? format(new Date(item.starttime + 'Z'), 'hh:mm') : null}</Text>
-                    </View>
-                  </View>
-                )}
-                keyExtractor={item => item.id.toString()}
-              /> : <Text style={styles.centerText}>No Games Today</Text>}
-            </View>
-          </View>
-        </ScrollView>
+        <ViewAllActivitiesModal refetchActivities={fetchActivities} activities={userActivities} currentUser={currentUser} currentTeam={currentUserTeam}/>
+      </ScrollView>
     </View>
   );
 }

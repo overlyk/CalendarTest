@@ -1,27 +1,24 @@
 //this is an example of a modal popup in react native
 import * as React from 'react';
 import { Modal, Portal, Text, PaperProvider, TextInput } from 'react-native-paper';
-import { TouchableOpacity, Button, View, StyleSheet, FlatList } from 'react-native';
-import { createGoal } from '../../api/logic/GoalLogic';
-import { Goal } from '../../api/models/Goal';
+import { TouchableOpacity, Button, View, StyleSheet, FlatList} from 'react-native';
+import { createGoal } from '../api/logic/GoalLogic';
+import { Goal } from '../api/models/Goal';
 import {useForm, Controller} from 'react-hook-form';
-import GreenButton from '../GreenButton';
-import { Activity } from '../../api/models/Activity';
-import { User } from '../../api/models/User';
-import { deleteActivity } from '../../api/logic/ActivityLogic';
+import GreenButton from './GreenButton';
+import { Activity } from '../api/models/Activity';
+import { User } from '../api/models/User';
+import { deleteActivity } from '../api/logic/ActivityLogic';
 import { format } from 'date-fns';
-import { Team } from '../../api/models/Team';
+import { Team } from '../api/models/Team';
 
-export default function ViewAllActivitiesModal({handleModalClose, refetchActivities, activities, isVisible, currentUser, currentTeam} : {handleModalClose: () => void; refetchActivities: () => void; activities: Activity[]; isVisible: boolean; currentUser: User; currentTeam: Team | undefined}) {
+export default function ViewActivities({refetchActivities, activities, currentUser, currentTeam} : {refetchActivities: () => void; activities: Activity[]; currentUser: User; currentTeam: Team | undefined}) {
   const deleteAndRefresh = async (id: number) => {
     await deleteActivity(id);
     refetchActivities();
   }
   return (
     <View>
-      <Portal>
-        <Modal visible={isVisible} contentContainerStyle={styles.container}>
-
         {currentUser.TeamId ? 
           <>
             <Text style={styles.header}>{currentUser.TeamId ? `${currentTeam?.name}'s Activities` : null}</Text>
@@ -69,11 +66,7 @@ export default function ViewAllActivitiesModal({handleModalClose, refetchActivit
               keyExtractor={item => item.id.toString()}
             /> 
           </>
-          : null}
-
-         <GreenButton onPress={handleModalClose} text="Cancel"/>
-        </Modal>
-      </Portal>
+          : null}     
     </View>
   );
 };
