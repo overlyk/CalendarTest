@@ -71,7 +71,7 @@ export default function Teams({currentUser} : {currentUser: User} ) {
             <GreenButton text="View Team" onPress={() => setTeamModalVisible(!teamModalVisible)}/>
             {currentUser.isCoach ? <GreenButton text="Schedule New Game" onPress={() => setGameModalVisible(!gameModalVisible)}/> : null}
             {currentUser.isCoach ? <CreateGameModal handleModalClose={() => setGameModalVisible(!gameModalVisible)} teams={teamsList} fetchTeamGames={fetchTeamGames} isVisible={gameModalVisible} userId={currentUser.id}></CreateGameModal> : null}
-            {currentUserTeam ? <ViewTeamModal handleModalClose={() => setTeamModalVisible(!teamModalVisible)} team={currentUserTeam} isVisible={teamModalVisible} userId={currentUser.id}></ViewTeamModal> : null}
+            {currentUserTeam ? <ViewTeamModal handleModalClose={() => setTeamModalVisible(!teamModalVisible)} team={currentUserTeam} isVisible={teamModalVisible} currentUser={currentUser}></ViewTeamModal> : null}
             <ScrollView>
               <View>
                 <Text style={styles.header}>Team Activities Coming Up!</Text>

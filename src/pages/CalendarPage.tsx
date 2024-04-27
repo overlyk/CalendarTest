@@ -101,7 +101,7 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
           }}
         />
           <View>
-            <Text style={styles.header}>Activities</Text>
+            <Text style={styles.header}>Activities Today</Text>
             <View>
             {userActivitiesPerDay.length > 0 ?
               <FlatList

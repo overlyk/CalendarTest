@@ -102,9 +102,10 @@ export default function Goals({currentUser} : {currentUser : User}) {
             <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
               {item.isCompleted ? 'Complete' : 'In Progress'}
             </Text>
+            { currentUser.isCoach ? 
             <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
               <Text style={{color: 'white'}}>X</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> : null }
           </TouchableOpacity>
         )}
         keyExtractor={item => item.id.toString()}

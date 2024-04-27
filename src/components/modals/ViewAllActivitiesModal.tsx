@@ -21,28 +21,56 @@ export default function ViewAllActivitiesModal({handleModalClose, refetchActivit
     <View>
       <Portal>
         <Modal visible={isVisible} contentContainerStyle={styles.container}>
-        <Text style={styles.header}>{currentUser.isCoach ? `${currentTeam?.name}'s Activities` : `${currentUser.firstname}'s Activities`}</Text>
-      <FlatList
-        style={{margin: 10}}
-        data={currentUser.isCoach ? activities.filter(x => x.teamid === currentUser.TeamId) : activities}
-        renderItem={({ item }) => (
-          <View style={styles.goalView}>
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={styles.goalItem}>{item.name}</Text>
-              <Text>{item.description}</Text>
-              <Text>Start: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
-              <Text>End: {item.endtime ? format(new Date(item.endtime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
-            </View>
-            <Text style={[styles.goalItem, { color: item.teamid ? 'green' : 'blue' }]}>
-              {item.teamid ? 'Team Activity' : 'Your Activity'}
-            </Text>
-            <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
-              <Text style={{color: 'white'}}>X</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        keyExtractor={item => item.id.toString()}
-      />
+
+        {currentUser.TeamId ? 
+          <>
+            <Text style={styles.header}>{currentUser.TeamId ? `${currentTeam?.name}'s Activities` : null}</Text>
+            <FlatList
+              style={{margin: 10}}
+              data={activities.filter(x => x.teamid == currentUser.TeamId)}
+              renderItem={({ item }) => (
+                <View style={styles.goalView}>
+                  <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style={styles.goalItem}>{item.name}</Text>
+                    <Text>{item.description}</Text>
+                    <Text>Start: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
+                    <Text>End: {item.endtime ? format(new Date(item.endtime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
+                  </View>
+                  {currentUser.isCoach ?
+                    <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+                      <Text style={{color: 'white'}}>X</Text>
+                    </TouchableOpacity>
+                    : null }
+                </View>
+              )}
+              keyExtractor={item => item.id.toString()}
+            /> 
+          </> : null}
+
+          {!currentUser.isCoach ? 
+          <>
+            <Text style={styles.header}>{`${currentUser.firstname}'s Activities`}</Text>
+            <FlatList
+              style={{margin: 10}}
+              data={activities.filter(x => x.teamid === 0)}
+              renderItem={({ item }) => (
+                <View style={styles.goalView}>
+                  <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style={styles.goalItem}>{item.name}</Text>
+                    <Text>{item.description}</Text>
+                    <Text>Start: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
+                    <Text>End: {item.endtime ? format(new Date(item.endtime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
+                  </View>
+                  <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+                    <Text style={{color: 'white'}}>X</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              keyExtractor={item => item.id.toString()}
+            /> 
+          </>
+          : null}
+
          <GreenButton onPress={handleModalClose} text="Cancel"/>
         </Modal>
       </Portal>
@@ -50,12 +78,11 @@ export default function ViewAllActivitiesModal({handleModalClose, refetchActivit
   );
 };
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+      container: {
+        backgroundColor: 'white',
         padding: 20,
-        backgroundColor: '#f0f0f0', // Light gray background
+        margin: 20,
+        borderRadius: 10,
       },
       header: {
         fontSize: 24,

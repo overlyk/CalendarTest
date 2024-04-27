@@ -13,13 +13,13 @@ import { getAllUsers, updateUserTeam } from '../../api/logic/UserLogic';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function ViewTeamModal({handleModalClose, team, isVisible, userId} : {handleModalClose: () => void; isVisible: boolean; team: Team, userId: number}) {
+export default function ViewTeamModal({handleModalClose, team, isVisible, currentUser} : {handleModalClose: () => void; isVisible: boolean; team: Team, currentUser: User}) {
     const [players, setPlayers] = useState<User[]>([]);
     const [allUnassignedUsers, setAllUnassignedUsers] = useState<User[]>([]);
     const { control, handleSubmit, setValue, formState: { errors } } = useForm<User>();
     const onSubmit = async (data) => {
       const user = {
-        id: data.TeamId,
+        id: data.id,
         username: '',
         password: '',
         firstname: '',
@@ -42,6 +42,21 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, userId
         }
       };
       useEffect(() => {fetchPlayers()}, []);
+
+      const removePlayer = async (id: number) => {
+        const user = {
+          id: id,
+          username: '',
+          password: '',
+          firstname: '',
+          lastname: '',
+          isCoach: false,
+          TeamId: 0
+        }
+        await updateUserTeam(user);
+        fetchPlayers();
+      }
+
   return (
     <View>
       <Portal>
@@ -51,14 +66,18 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, userId
             style={{margin: 10}}
             data={players}
             renderItem={({ item }) => (
-                <TouchableOpacity style={styles.goalView} onPress={() => console.log("goal pressed")}>
-                    <View>
-                        <Text style={styles.goalItem}>{item.firstname} {item.lastname}</Text>
-                    </View>
-                </TouchableOpacity>
+            <View  style={styles.goalView} > 
+              <Text style={styles.goalItem}>{item.firstname} {item.lastname}</Text>
+              {currentUser.isCoach ? 
+              <TouchableOpacity style={styles.deleteButton} onPress={() => removePlayer(item.id)}>
+                <Text style={{color: 'white'}}>X</Text>
+              </TouchableOpacity> : null }
+            </View>
             )}
             keyExtractor={item => item.id.toString()}
         />
+         {currentUser.isCoach ? 
+         <>
          <Controller
               name="TeamId"
               control={control}
@@ -66,36 +85,37 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, userId
                 required: true,
               }}
               render={({ field: { onChange, value } }) => (
-                  <SelectDropdown
-                    data={allUnassignedUsers}
-                    onSelect={(selectedItem, index) => {
-                        onChange(selectedItem.id);
-                    }}
+              <SelectDropdown
+                data={allUnassignedUsers}
+                onSelect={(selectedItem, index) => {
+                    onChange(selectedItem.id);
+                }}
 
-                    renderButton={(selectedItem, isOpened) => {
-                      return (
-                        <View style={styles.dropdownButtonStyle}>
-                          <Text style={styles.dropdownButtonTxtStyle}>
-                            {selectedItem ? `${selectedItem.firstname} ${selectedItem.lastname}` : 'Select Player'}
-                          </Text>
-                          <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
-                        </View>
-                      );
-                    }}
-                    renderItem={(item, index, isSelected) => {
-                      return (
-                        <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#D2D9DF'})}}>
-                          <Text style={styles.dropdownItemTxtStyle}>{`${item.firstname} ${item.lastname}`}</Text>
-                        </View>
-                      );
-                    }}
-                    showsVerticalScrollIndicator={false}
-                    dropdownStyle={styles.dropdownMenuStyle}
-                  />
-                )}
+                renderButton={(selectedItem, isOpened) => {
+                  return (
+                    <View style={styles.dropdownButtonStyle}>
+                      <Text style={styles.dropdownButtonTxtStyle}>
+                        {selectedItem ? `${selectedItem.firstname} ${selectedItem.lastname}` : 'Select Player'}
+                      </Text>
+                      <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+                    </View>
+                  );
+                }}
+                renderItem={(item, index, isSelected) => {
+                  return (
+                    <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#D2D9DF'})}}>
+                      <Text style={styles.dropdownItemTxtStyle}>{`${item.firstname} ${item.lastname}`}</Text>
+                    </View>
+                  );
+                }}
+                showsVerticalScrollIndicator={false}
+                dropdownStyle={styles.dropdownMenuStyle}
+              />
+            )}
             />
             {errors.TeamId && <Text>Select a player to add them</Text>}
             <GreenButton onPress={handleSubmit(onSubmit)} text="Add Player"/>
+            </> : null}
          <GreenButton onPress={handleModalClose} text="Back"/>
         </Modal>
       </Portal>
@@ -205,6 +225,14 @@ const styles = StyleSheet.create({
      padding: 10,
      margin: 15,
      height: 40,
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   submitButtonText:{
      color: 'white',
