@@ -45,6 +45,11 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
     
 	  activityToEdit ? await updateActivity(activity) : await createActivity(activity);
     fetchActivities();
+    setValue("name", "");
+    setValue("description", "");
+    setValue("location", "");
+    setValue("starttime", new Date());
+    setValue("endtime", new Date());
     handleModalClose();
   };
 

@@ -85,6 +85,8 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
         <Calendar
           onDayPress={day => {
             setSelected(day.dateString);
+            console.log("current day selected " + day.dateString);
+            console.log("saved days" + userActivities.map(game => format(new Date(game.starttime), 'yyyy-MM-dd')))
           }}
           markedDates={{
             ...currentGames,
@@ -97,17 +99,19 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
           <View>
             <Text style={styles.header}>Activities</Text>
             <View>
+            <Text>test23</Text>
               <FlatList
                 style={{margin: 10}}
-                data={userActivities.filter(activity => new Date(activity.starttime).getDate() == new Date(selected).getDate() && new Date(activity.starttime).getMonth() == new Date(selected).getMonth() && new Date(activity.starttime).getFullYear() == new Date(selected).getFullYear())}
+                data={userActivities.filter(activity => new Date(activity.starttime).getDate() - 1 == new Date(selected).getDate() && new Date(activity.starttime).getMonth() == new Date(selected).getMonth() && new Date(activity.starttime).getFullYear() == new Date(selected).getFullYear())}
                 scrollEnabled={false}
                 renderItem={({ item }) => (
                   <View style={styles.goalView}>
                     <View>
+                      <Text>testest</Text>
                       <Text style={styles.goalItem}>{item.name}</Text>
                       <Text>{item.description}</Text>
-                      <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
-                      <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
+                      <Text>Date: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
+                      <Text>Time: {item.starttime ? format(new Date(item.starttime + 'Z'), 'hh:mm'): null}</Text>
                     </View>
                   </View>
                 )}
@@ -118,7 +122,7 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
             <View>
               <FlatList
                 style={{margin: 10}}
-                data={userGames.filter(userGames => new Date(userGames.starttime).getDate() == new Date(selected).getDate() && new Date(userGames.starttime).getMonth() == new Date(selected).getMonth() && new Date(userGames.starttime).getFullYear() == new Date(selected).getFullYear())}
+                data={userGames.filter(userGames => new Date(userGames.starttime).getDate() - 1 == new Date(selected).getDate() && new Date(userGames.starttime).getMonth() == new Date(selected).getMonth() && new Date(userGames.starttime).getFullYear() == new Date(selected).getFullYear())}
                 scrollEnabled={false}
                 renderItem={({ item }) => (
                   <View style={styles.goalView}>
@@ -129,9 +133,8 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
                       <Text style={styles.goalItem}>
                       AWAY TEAM  - {teamsList.find(team => team.id === item.awayteamid)?.name}
                       </Text>
-                      <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
-                      <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
-                      <Divider />
+                      <Text>Date: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
+                      <Text>Time: {item.starttime ? format(new Date(item.starttime + 'Z'), 'hh:mm') : null}</Text>
                     </View>
                   </View>
                 )}
