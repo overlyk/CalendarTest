@@ -1,5 +1,5 @@
 import { Modal, Portal, Text} from 'react-native-paper';
-import { TouchableOpacity, Button, View, StyleSheet, FlatList } from 'react-native';
+import { TouchableOpacity, Button, View, StyleSheet, FlatList, ScrollView } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import GreenButton from '../GreenButton';
 import { Team } from '../../api/models/Team';
@@ -58,62 +58,68 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, curren
     <View>
       <Portal>
         <Modal visible={isVisible} contentContainerStyle={styles.container}>
-        <Text style={styles.header}>{`${team.name}'s Players!`}</Text>
-        <FlatList
-            style={{margin: 10}}
-            data={players}
-            renderItem={({ item }) => (
-            <View  style={styles.goalView} > 
-              <Text style={styles.goalItem}>{item.firstname} {item.lastname}</Text>
-              {currentUser.isCoach ? 
-              <TouchableOpacity style={styles.deleteButton} onPress={() => removePlayer(item.id)}>
-                <Text style={{color: 'white'}}>X</Text>
-              </TouchableOpacity> : null }
-            </View>
-            )}
-            keyExtractor={item => item.id.toString()}
-        />
-         {currentUser.isCoach ? 
-         <>
-         <Controller
-              name="TeamId"
-              control={control}
-              rules={{
-                required: true,
-              }}
-              render={({ field: { onChange, value } }) => (
-              <SelectDropdown
-                data={allUnassignedUsers}
-                onSelect={(selectedItem, index) => {
-                    onChange(selectedItem.id);
-                }}
-
-                renderButton={(selectedItem, isOpened) => {
-                  return (
-                    <View style={styles.dropdownButtonStyle}>
-                      <Text style={styles.dropdownButtonTxtStyle}>
-                        {selectedItem ? `${selectedItem.firstname} ${selectedItem.lastname}` : 'Select Player'}
-                      </Text>
-                      <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+          <View>
+            <ScrollView>
+              <View>
+                <Text style={styles.header}>{`${team.name}'s Players!`}</Text>
+                <FlatList
+                    style={{margin: 10}}
+                    data={players}
+                    scrollEnabled={false}
+                    renderItem={({ item }) => (
+                    <View  style={styles.goalView} > 
+                      <Text style={styles.goalItem}>{item.firstname} {item.lastname}</Text>
+                      {currentUser.isCoach ? 
+                      <TouchableOpacity style={styles.deleteButton} onPress={() => removePlayer(item.id)}>
+                        <Text style={{color: 'white'}}>X</Text>
+                      </TouchableOpacity> : null }
                     </View>
-                  );
-                }}
-                renderItem={(item, index, isSelected) => {
-                  return (
-                    <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#D2D9DF'})}}>
-                      <Text style={styles.dropdownItemTxtStyle}>{`${item.firstname} ${item.lastname}`}</Text>
-                    </View>
-                  );
-                }}
-                showsVerticalScrollIndicator={false}
-                dropdownStyle={styles.dropdownMenuStyle}
-              />
-            )}
-            />
-            {errors.TeamId && <Text>Select a player to add them</Text>}
-            <GreenButton onPress={handleSubmit(onSubmit)} text="Add Player"/>
-            </> : null}
-         <GreenButton onPress={handleModalClose} text="Back"/>
+                    )}
+                    keyExtractor={item => item.id.toString()}
+                />
+               </View>
+            </ScrollView>
+            {currentUser.isCoach ? 
+            <>
+            <Controller
+                  name="TeamId"
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                  <SelectDropdown
+                    data={allUnassignedUsers}
+                    onSelect={(selectedItem, index) => {
+                        onChange(selectedItem.id);
+                    }}
+                    renderButton={(selectedItem, isOpened) => {
+                      return (
+                        <View style={styles.dropdownButtonStyle}>
+                          <Text style={styles.dropdownButtonTxtStyle}>
+                            {selectedItem ? `${selectedItem.firstname} ${selectedItem.lastname}` : 'Select Player'}
+                          </Text>
+                          <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+                        </View>
+                      );
+                    }}
+                    renderItem={(item, index, isSelected) => {
+                      return (
+                        <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#D2D9DF'})}}>
+                          <Text style={styles.dropdownItemTxtStyle}>{`${item.firstname} ${item.lastname}`}</Text>
+                        </View>
+                      );
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    dropdownStyle={styles.dropdownMenuStyle}
+                  />
+                )}
+                />
+                {errors.TeamId && <Text>Select a player to add them</Text>}
+                <GreenButton onPress={handleSubmit(onSubmit)} text="Add Player"/>
+                </> : null}
+            <GreenButton onPress={handleModalClose} text="Back"/>
+          </View>
         </Modal>
       </Portal>
     </View>

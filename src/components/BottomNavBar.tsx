@@ -12,12 +12,11 @@ export default function BottomNavBar({currentUser} : {currentUser: User} ) {
   const GoalsRoute = () => <Goals currentUser={currentUser}/>;
   const TeamRoute = () => <Teams currentUser={currentUser}/>;
   const NotificationsRoute = () => <Activities currentUser={currentUser}/>;
-
   const [routes] = useState([
     { key: 'home', title: 'Home', focusedIcon: 'home'},
     { key: 'goals', title: 'Goals', focusedIcon: 'ballot' },
     { key: 'team', title: 'Team', focusedIcon: 'account-box-multiple' },
-    { key: 'calendar', title: 'Calendar', focusedIcon: 'calendar' },
+    { key: 'calendar', title: 'Activities', focusedIcon: 'calendar' },
   ]);
   const renderScene = BottomNavigation.SceneMap({
     home: HomeRoute,
@@ -25,6 +24,7 @@ export default function BottomNavBar({currentUser} : {currentUser: User} ) {
     team: TeamRoute,
     calendar: NotificationsRoute,
   });
+  
   return (
         <BottomNavigation
           navigationState={{ index, routes }}

@@ -14,8 +14,6 @@ export default function CreateGameModal({handleModalClose, fetchTeamGames, teams
   const { control, watch, handleSubmit, formState: { errors } } = useForm<Game>();
   const homeTeamId = watch('hometeamid');
   const awayTeamId = watch('awayteamid');
-
-
   const onSubmit = async (data) => {
     const game = {
         id: 0,
@@ -28,7 +26,7 @@ export default function CreateGameModal({handleModalClose, fetchTeamGames, teams
     fetchTeamGames();
     handleModalClose();
   };
-
+  
   return (
     <View>
       <Portal>

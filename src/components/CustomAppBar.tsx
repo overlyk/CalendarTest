@@ -1,25 +1,11 @@
 
 import { Appbar } from 'react-native-paper';
-import { Platform } from 'react-native';
-import { StyleSheet } from 'react-native';
-import { useState } from 'react';
 import UserMenu from './UserMenu';
 export default function CustomAppBar({handleLogout} : {handleLogout:  () => void}) {
-    const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
-    const [userMenu, setUserMenu] = useState(false);
-
-    const handleOpenMenu = () => {
-    setUserMenu(!userMenu);
-}
     return(
-    <Appbar.Header style={styles.container}>
+    <Appbar.Header style={{backgroundColor: '#12bc05'}}>
         <Appbar.Content title="Phoenix Fitness"/>
         <UserMenu handleLogout={handleLogout}/>
     </Appbar.Header>
     );
 };
-const styles = StyleSheet.create({
-container: {
-    backgroundColor: '#12bc05'
- },
-});

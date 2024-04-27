@@ -40,7 +40,6 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
         teamid: 0,
         location: data.location
       }
-    
 	  activityToEdit ? await updateActivity(activity) : await createActivity(activity);
     fetchActivities();
     setValue("name", "");

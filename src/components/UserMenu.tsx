@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Menu, IconButton } from 'react-native-paper';
+import { Platform } from 'react-native';
 
 export default function UserMenu({handleLogout} : {handleLogout: () => void}) {
+  const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
     const [visible, setVisible] = useState(false);
     const closeMenu = () => setVisible(false);
     const openMenu = () => setVisible(true);
@@ -13,7 +15,7 @@ export default function UserMenu({handleLogout} : {handleLogout: () => void}) {
         onDismiss={closeMenu}
         anchor={
           <IconButton
-            icon="dots-vertical"
+            icon={MORE_ICON}
             onPress={openMenu}
           ></IconButton>
         }

@@ -26,7 +26,6 @@ export default function GameText({ game } : { game: Game }) {
     fetchAwayTeam();
   }, [game.hometeamid, game.awayteamid])
 
-
   return (
     <View>
       {game ?      
