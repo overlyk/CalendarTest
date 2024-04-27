@@ -109,20 +109,25 @@ export default function Home({currentUser} : {currentUser: User} ) {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <Text style ={styles.header}>Home</Text> 
-        <Text style ={styles.titleText}>Welcome, {currentUser.firstname}!</Text> 
-        <Text style={styles.header}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
-        <Text style ={styles.header}>Next Activity</Text> 
-          <View style={styles.goalView}>
-            <View>
-              <Text style={styles.goalItem}>{nextActivity.name}</Text>
-              <Text>{nextActivity.description}</Text>
-              <Text>Date: {nextActivity.starttime ? format(new Date(nextActivity.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
-              <Text>Time: {nextActivity.starttime ? format(new Date(nextActivity.starttime + 'Z'), 'hh:mm'): null}</Text>
+        <Text style ={styles.header}>Welcome, {currentUser.firstname}!</Text> 
+        <Text style={styles.header2}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
+
+        <View style={styles.sectionView}>
+          <Text style ={styles.header2}>Next Activity</Text> 
+          <View style={styles.goalView2}>
+           <View>
+            <Text style={styles.goalItem}>Name: {nextActivity.name}</Text>
+            <Text>Description: {nextActivity.description}</Text>
+            <Text>Date: {nextActivity.starttime ? format(new Date(nextActivity.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
+            <Text>Time: {nextActivity.starttime ? format(new Date(nextActivity.starttime + 'Z'), 'hh:mm'): null}</Text>
             </View>
           </View>
-        <Text style ={styles.header}>Next Game</Text> 
-          <View style={styles.goalView}>
+        </View>
+
+        <View style={styles.sectionView}>
+        <Text style ={styles.header2}>Next Game</Text>
+          <View style={styles.goalView2}>
+            <View>
               <Text style={styles.goalItem}>
               HOME TEAM - {teamsList.find(team => team.id === nextGame.hometeamid)?.name}
               </Text>
@@ -131,7 +136,9 @@ export default function Home({currentUser} : {currentUser: User} ) {
               </Text>
               <Text>Date: {nextGame.starttime ? format(new Date(nextGame.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
               <Text>Time: {nextGame.starttime ? format(new Date(nextGame.starttime + 'Z'), 'hh:mm') : null}</Text>
+            </View>
           </View>
+        </View>
         <Text style={styles.header}>{currentUser.isCoach ? `${currentTeam?.name}'s Calendar` : `${currentUser.firstname}'s Calendar`}</Text>
         <Calendar
           onDayPress={day => {
@@ -216,6 +223,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  goalView2: {
+    padding: 10,
+    marginBottom: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    textAlign: 'center',
+  },
+  sectionView: {
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 5,
+  },
   topContainer: {
     flex: .25,
     //alignContent: 'center',
@@ -224,9 +243,17 @@ const styles = StyleSheet.create({
  header: {
   fontSize: 24,
   fontWeight: 'bold',
-  marginBottom: 10,
+  marginBottom: 5,
   textAlign: 'center',
   color: 'green', // Green header text color
+},
+header2: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  marginBottom: 2,
+  textAlign: 'center',
+  color: 'green', // Green header text color
+  textDecorationLine: 'underline'
 },
  accordianHeader: {
     flex: .25,
@@ -291,7 +318,7 @@ const styles = StyleSheet.create({
     //color: 'green',
    // textAlign: 'center',
     //justifyContent: 'center',
-    flex: 1,
+    textAlign: 'center'
     },
  surface: {
     padding: 0,
