@@ -3,24 +3,25 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Menu, Divider, PaperProvider, IconButton } from 'react-native-paper';
 
-export default function UserMenu(props) {
+export default function UserMenu({handleLogout} : {handleLogout: () => void}) {
     const [visible, setVisible] = useState(false);
     const closeMenu = () => setVisible(false);
     const openMenu = () => setVisible(true);
+
+
     return (
       <Menu
         visible={visible}
         onDismiss={closeMenu}
         anchor={
           <IconButton
-            {...props}
             icon="dots-vertical"
             onPress={openMenu}
           ></IconButton>
         }
       >
-        <Menu.Item onPress={() => {}} title="asdf" />
-        <Menu.Item onPress={() => {}} title="Sfdsa" />
+        <Menu.Item onPress={() => {}} title="Settings" />
+        <Menu.Item onPress={handleLogout} title="Logout" />
       </Menu>
     );
   };

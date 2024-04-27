@@ -21,8 +21,9 @@ export default function App() {
     }
   };
   registerTranslation("en", enGB);
+
   const handleLogout = () => {
-      setLoggedIn(false);
+    setLoggedIn(false);
   };
 
   //if logged in, show bottomnavbar and route to main page - if not, show login page
@@ -33,8 +34,8 @@ export default function App() {
           {loggedIn 
           ? 
           <View style={styles.appBar}>
-            <CustomAppBar />
-            <BottomNavBar currentUser={currentUser} handleLogout={handleLogout}/> 
+            <CustomAppBar handleLogout={handleLogout}/>
+            <BottomNavBar currentUser={currentUser} /> 
           </View>
           : 
           <Login handleLogin={handleLogin}/>}

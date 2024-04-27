@@ -3,7 +3,8 @@ import { Appbar } from 'react-native-paper';
 import { Platform } from 'react-native';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { useState } from 'react';
-export default function CustomAppBar() {
+import UserMenu from './UserMenu';
+export default function CustomAppBar({handleLogout} : {handleLogout:  () => void}) {
     const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
     const [userMenu, setUserMenu] = useState(false);
 
@@ -13,15 +14,12 @@ export default function CustomAppBar() {
     return(
     <Appbar.Header style={styles.container}>
         <Appbar.Content title="Phoenix Fitness"/>
-        {/* <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Action icon="magnify" onPress={() => {}} /> */}
-        <Appbar.Action icon={MORE_ICON} onPress={handleOpenMenu} />
+        <UserMenu handleLogout={handleLogout}/>
     </Appbar.Header>
     );
 };
 const styles = StyleSheet.create({
 container: {
-    //alignContent: 'center',
     backgroundColor: '#12bc05'
  },
 });

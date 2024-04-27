@@ -55,13 +55,19 @@ export default function Goals({currentUser} : {currentUser : User}) {
       fetchGoals();
     }
 
+    const toggleTeamGoalCompleted = async (goal: Goal) => {
+      currentUser.isCoach ? await toggleGoalCompletion(goal) : null;
+      fetchGoals();
+    }
+
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.header}>Goals</Text>
       <GreenButton text={currentUser.isCoach ? "Create Team Goal" : "Create Goal"} onPress={openModal}/>
       <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} currentUser={currentUser}></CreateGoalModal>
      {!currentUser.isCoach ? 
      <>
-            <Text style={styles.header}>{`${currentUser.firstname}'s Goals`}</Text>
+     <Text style={styles.header}>{`${currentUser.firstname}'s Goals`}</Text>
            <FlatList
            style={{margin: 10}}
            data={userGoals.filter(x => x.teamid === 0)}
@@ -88,7 +94,7 @@ export default function Goals({currentUser} : {currentUser : User}) {
         style={{margin: 10}}
         data={userGoals.filter(x => x.teamid != 0)}
         renderItem={({ item }) => (
-          <View style={styles.goalView}>
+          <TouchableOpacity style={styles.goalView} onPress={() => toggleTeamGoalCompleted(item)}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Text style={styles.goalItem}>{item.name}</Text>
               <Text>{item.description}</Text>
@@ -99,7 +105,7 @@ export default function Goals({currentUser} : {currentUser : User}) {
             <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
               <Text style={{color: 'white'}}>X</Text>
             </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         )}
         keyExtractor={item => item.id.toString()}
       />
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 10,
     color: 'green', // Green header text color
   },
   goalView: {

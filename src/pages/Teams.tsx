@@ -85,15 +85,15 @@ export default function Teams({currentUser} : {currentUser: User} ) {
                         <View>
                           <Text style={styles.goalItem}>{item.name}</Text>
                           <Text>{item.description}</Text>
-                          <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
-                          <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
+                          <Text>Date: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
+                          <Text>Time: {item.starttime ? format(new Date(item.starttime + 'Z'), 'hh:mm') : 'N/A'}</Text>
                         </View>
                       </View>
                     )}
                     keyExtractor={item => item.id.toString()}
                   />
                 </View>
-                <Text style={styles.header}>Next Games In Schedule!</Text>
+                <Text style={styles.header}>Games Schedule</Text>
                 <View>
                   <FlatList
                     style={{margin: 10}}
@@ -110,7 +110,6 @@ export default function Teams({currentUser} : {currentUser: User} ) {
                           </Text>
                           <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
                           <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
-                          <Divider />
                         </View>
                       </View>
                     )}

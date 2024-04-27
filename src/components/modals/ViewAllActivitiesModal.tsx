@@ -10,8 +10,9 @@ import { Activity } from '../../api/models/Activity';
 import { User } from '../../api/models/User';
 import { deleteActivity } from '../../api/logic/ActivityLogic';
 import { format } from 'date-fns';
+import { Team } from '../../api/models/Team';
 
-export default function ViewAllActivitiesModal({handleModalClose, refetchActivities, activities, isVisible, currentUser} : {handleModalClose: () => void; refetchActivities: () => void; activities: Activity[]; isVisible: boolean; currentUser: User}) {
+export default function ViewAllActivitiesModal({handleModalClose, refetchActivities, activities, isVisible, currentUser, currentTeam} : {handleModalClose: () => void; refetchActivities: () => void; activities: Activity[]; isVisible: boolean; currentUser: User; currentTeam: Team | undefined}) {
   const deleteAndRefresh = async (id: number) => {
     await deleteActivity(id);
     refetchActivities();
@@ -20,10 +21,10 @@ export default function ViewAllActivitiesModal({handleModalClose, refetchActivit
     <View>
       <Portal>
         <Modal visible={isVisible} contentContainerStyle={styles.container}>
-        <Text style={styles.header}>{`${currentUser.firstname}'s Activities`}</Text>
+        <Text style={styles.header}>{currentUser.isCoach ? `${currentTeam?.name}'s Activities` : `${currentUser.firstname}'s Activities`}</Text>
       <FlatList
         style={{margin: 10}}
-        data={activities}
+        data={currentUser.isCoach ? activities.filter(x => x.teamid === currentUser.TeamId) : activities}
         renderItem={({ item }) => (
           <View style={styles.goalView}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>

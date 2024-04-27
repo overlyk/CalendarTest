@@ -80,13 +80,11 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
         <Text style={styles.header}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
         <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setCreateModalVisible(true)}/>
         <GreenButton text={currentUser.isCoach ? "View Team Activities" : "View Activities"} onPress={() => setViewModalVisible(true)}/>
-        <ViewAllActivitiesModal handleModalClose={() => setViewModalVisible(false)} refetchActivities={fetchActivities} activities={userActivities} isVisible={viewModalVisible} currentUser={currentUser}/>
+        <ViewAllActivitiesModal handleModalClose={() => setViewModalVisible(false)} refetchActivities={fetchActivities} activities={userActivities} isVisible={viewModalVisible} currentUser={currentUser} currentTeam={currentUserTeam}/>
         <CreateActivityModal handleModalClose={() => setCreateModalVisible(false)} fetchActivities={fetchActivities} isVisible={createModalVisible} user={currentUser}/>
         <Calendar
           onDayPress={day => {
             setSelected(day.dateString);
-            console.log("current day selected " + day.dateString);
-            console.log("saved days" + userActivities.map(game => format(new Date(game.starttime), 'yyyy-MM-dd')))
           }}
           markedDates={{
             ...currentGames,
@@ -99,7 +97,6 @@ export default function CalendarPage({currentUser} : {currentUser: User} ) {
           <View>
             <Text style={styles.header}>Activities</Text>
             <View>
-            <Text>test23</Text>
               <FlatList
                 style={{margin: 10}}
                 data={userActivities.filter(activity => new Date(activity.starttime).getDate() - 1 == new Date(selected).getDate() && new Date(activity.starttime).getMonth() == new Date(selected).getMonth() && new Date(activity.starttime).getFullYear() == new Date(selected).getFullYear())}

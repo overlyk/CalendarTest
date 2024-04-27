@@ -12,18 +12,18 @@ import Teams from '../pages/Teams';
 import { User } from '../api/models/User';
 import { useState } from 'react';
 
-export default function BottomNavBar({currentUser, handleLogout} : {currentUser: User, handleLogout: () => void} ) {
+export default function BottomNavBar({currentUser} : {currentUser: User} ) {
   const [index, setIndex] = useState(0);
-  const HomeRoute = () => <Home currentUser={currentUser} handleLogout = {handleLogout}/>;
+  const HomeRoute = () => <Home currentUser={currentUser}/>;
   const GoalsRoute = () => <Goals currentUser={currentUser}/>;
   const TeamRoute = () => <Teams currentUser={currentUser}/>;
   const NotificationsRoute = () => <CalendarPage currentUser={currentUser}/>;
 
   const [routes] = useState([
-    { key: 'home', title: 'Home', focusedIcon: 'heart', unfocusedIcon: 'heart-outline'},
-    { key: 'goals', title: 'Goals', focusedIcon: 'album' },
-    { key: 'team', title: 'Team', focusedIcon: 'history' },
-    { key: 'calendar', title: 'Calendar', focusedIcon: 'bell', unfocusedIcon: 'bell-outline' },
+    { key: 'home', title: 'Home', focusedIcon: 'home'},
+    { key: 'goals', title: 'Goals', focusedIcon: 'ballot' },
+    { key: 'team', title: 'Team', focusedIcon: 'account-box-multiple' },
+    { key: 'calendar', title: 'Calendar', focusedIcon: 'calendar' },
   ]);
   const renderScene = BottomNavigation.SceneMap({
     home: HomeRoute,

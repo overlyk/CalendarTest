@@ -13,7 +13,7 @@ import {Calendar, LocaleConfig} from 'react-native-calendars';
 import { getAllTeams } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 
-export default function Home({currentUser, handleLogout} : {currentUser: User, handleLogout: () => void} ) {
+export default function Home({currentUser} : {currentUser: User} ) {
   const [nextGame, setNextGame] = useState({} as Game);
   const [nextActivity, setNextActivity] = useState({} as Activity);
   const [selected, setSelected] = useState('');
@@ -68,7 +68,7 @@ export default function Home({currentUser, handleLogout} : {currentUser: User, h
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <Text style ={styles.header}>Home</Text> 
-        <Text style ={styles.titleText}>Welcome, {currentUser.firstname}! {<LogoutButton handleLogout={handleLogout} />}</Text> 
+        <Text style ={styles.titleText}>Welcome, {currentUser.firstname}!</Text> 
         <List.Accordion title="Next Activity" id="1" style ={styles.accordianHeader}>
             <ActivityText activity={nextActivity}/>
         </List.Accordion>

@@ -151,6 +151,33 @@ export const updateUser = async (user: User): Promise<boolean> => {
     }
 };
 
+export const updateUserTeam = async (user: User): Promise<boolean> => {
+    try {
+        const response = await fetch(variables.API_URL + '/api/User/updateteam', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: user.id,
+                username: '',
+                password: '',
+                firstname: '',
+                lastname: '',
+                TeamId: user.TeamId,
+                isCoach: 0
+            })
+        });
+
+        return response.ok;
+    } catch (error) {
+        console.error('error happened: ', error);
+        return false;
+    }
+};
+
+
 export const deleteUser = async (id: number): Promise<boolean> => {
     try {
         const response = await fetch(variables.API_URL + '/api/User/' + id, {
