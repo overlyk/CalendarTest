@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react'
 import { Text } from 'react-native-paper';
 import { User } from '../api/models/User';
@@ -14,19 +14,24 @@ export default function Activities({currentUser} : {currentUser: User} ) {
   const [userActivities, setUserActivities] = useState<Activity[]>([]);
   const [teamsList, setTeamsList] = useState<Team[]>([]);
   const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [isLoadingActivities, setIsLoadingActivities] = useState(true);
+  const [isLoadingTeams, setIsLoadingTeams] = useState(true);
+
   const currentUserTeam = teamsList.find(team => team.id === currentUser.TeamId);
   const fetchTeams = async () => {
     const allTeams = await getAllTeams();
     if (allTeams) {
       setTeamsList(allTeams);
     }
+    setIsLoadingTeams(false);
   };
   const fetchActivities = async () => {
     const allActivities = await getAllActivities();
     if (allActivities) {
-      const filteredActivities = allActivities.filter(activity => activity.userid === currentUser.id || activity.teamid === currentUser.TeamId)
+      const filteredActivities = allActivities.filter(activity => activity.userid === currentUser.id || activity.teamid === currentUser.TeamId);
       setUserActivities(filteredActivities);
     }
+    setIsLoadingActivities(false);
   };
   useEffect(() => {
     fetchActivities();
@@ -34,12 +39,14 @@ export default function Activities({currentUser} : {currentUser: User} ) {
   }, [])
   return (
     <View style={styles.container}>
+      {isLoadingActivities || isLoadingTeams ? <ActivityIndicator size="large" color="green"/> :
       <ScrollView style={styles.scrollView}>
-        <Text style={styles.header}>Activities</Text>
-        <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setCreateModalVisible(true)}/>
-        <CreateActivityModal handleModalClose={() => setCreateModalVisible(false)} fetchActivities={fetchActivities} isVisible={createModalVisible} user={currentUser}/>
-        <ViewAllActivitiesModal refetchActivities={fetchActivities} activities={userActivities} currentUser={currentUser} currentTeam={currentUserTeam}/>
+          <Text style={styles.header}>Activities</Text>
+          <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setCreateModalVisible(true)}/>
+          <CreateActivityModal handleModalClose={() => setCreateModalVisible(false)} fetchActivities={fetchActivities} isVisible={createModalVisible} user={currentUser}/>
+          <ViewAllActivitiesModal refetchActivities={fetchActivities} activities={userActivities} currentUser={currentUser} currentTeam={currentUserTeam}/>
       </ScrollView>
+      }
     </View>
   );
 }
@@ -49,7 +56,7 @@ const styles = StyleSheet.create({
      paddingTop: 20,
      flex: 10,
      justifyContent: 'space-evenly',
-     backgroundColor: '#f0f0f0', // Light gray background
+     backgroundColor: '#f0f0f0',
   },
   header: {
     fontSize: 24,
@@ -59,7 +66,7 @@ const styles = StyleSheet.create({
     color: 'green',
   },
   scrollView: {
-    backgroundColor: '#f0f0f0', // Light gray background
+    backgroundColor: '#f0f0f0',
     marginHorizontal: 5,
 },
 });

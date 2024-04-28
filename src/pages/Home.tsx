@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import  { useEffect, useState } from 'react'
 import { Text } from 'react-native-paper';
 import { User } from '../api/models/User';
@@ -23,7 +23,9 @@ export default function Home({currentUser} : {currentUser: User} ) {
   const [userActivitiesPerDay, setUserActivitiesPerDay] = useState<Activity[]>([]);
   const [gameDayList, setGameDayList] = useState<string[]>([]);
   const [activityDayList, setActivityDayList] = useState<string[]>([]);
-
+  const [isLoadingTeams, setIsLoadingTeams] = useState(true);
+  const [isLoadingActivities, setIsLoadingActivities] = useState(true);
+  const [isLoadingGames, setIsLoadingGames] = useState(true);
   let currentGames = {};
   let currentActivities = {};
 
@@ -33,6 +35,7 @@ export default function Home({currentUser} : {currentUser: User} ) {
         setTeamsList(allTeams);
         setCurrentTeam(allTeams.find(x => x.id === currentUser.TeamId));
       }
+      setIsLoadingTeams(false);
     };
 
     const fetchActivities = async () => {
@@ -46,35 +49,36 @@ export default function Home({currentUser} : {currentUser: User} ) {
           const startTimeB = new Date(b.starttime).getTime();
           return startTimeA - startTimeB;
         });
-
-        setUserActivities(filteredActivities);
-        const activityDays = filteredActivities.map(activity => format(new Date(activity.starttime), 'yyyy-MM-dd'));
-        setActivityDayList(activityDays);
-
-      // Set the next activity by taking the first element from the sorted array
-      if (filteredActivities.length > 0) {
-        setNextActivity(filteredActivities[0]);
+        if (filteredActivities.length > 0) {
+          setUserActivities(filteredActivities);
+          const activityDays = filteredActivities.map(activity => format(new Date(activity.starttime), 'yyyy-MM-dd'));
+          setActivityDayList(activityDays);
+          setNextActivity(filteredActivities.filter(activity => format(new Date(activity.starttime), 'yyyy-MM-dd') >= format(new Date(), 'yyyy-MM-dd'))[0]);
       }
       }
+      setIsLoadingActivities(false);
     };
     const fetchGames = async () => {
       const allGames = await getAllGames();
       if (allGames) {
         const filteredGames = allGames
-        .filter(game => (game.hometeamid == currentUser.TeamId) || (game.awayteamid == currentUser.TeamId))
+        .filter(game => (game.hometeamid === currentUser.TeamId) || (game.awayteamid === currentUser.TeamId))
         .sort((a, b) => {
           // Convert start times to Date objects and subtract to get a numeric difference
           const startTimeA = new Date(a.starttime).getTime();
           const startTimeB = new Date(b.starttime).getTime();
           return startTimeA - startTimeB;
         });
-        setUserGames(filteredGames);
-        const gameDays = filteredGames.map(game => format(new Date(game.starttime), 'yyyy-MM-dd'));
-        setGameDayList(gameDays);
+
         if (filteredGames.length > 0) {
-          setNextGame(filteredGames[0]);
+          setUserGames(filteredGames);
+          const gameDays = filteredGames.map(game => format(new Date(game.starttime), 'yyyy-MM-dd'));
+          setGameDayList(gameDays);
+          setNextGame(filteredGames.filter(game => format(new Date(game.starttime), 'yyyy-MM-dd') >= format(new Date(), 'yyyy-MM-dd'))[0]);
         }
+
       }
+      setIsLoadingGames(false);
     };
 
   useEffect(() => {
@@ -105,6 +109,7 @@ export default function Home({currentUser} : {currentUser: User} ) {
 
   return (
     <View style={styles.container}>
+      {isLoadingActivities || isLoadingTeams || isLoadingGames ? <ActivityIndicator size="large" color="green"/> :
       <ScrollView style={styles.scrollView}>
         <Text style ={styles.header}>Welcome, {currentUser.firstname}!</Text> 
         <Text style={styles.header2}>{`Today's Date: ${format(new Date(), 'MM/dd/yyyy')}`}</Text>
@@ -113,10 +118,14 @@ export default function Home({currentUser} : {currentUser: User} ) {
           <Text style ={styles.header2}>Next Activity</Text> 
           <View style={styles.goalView2}>
            <View>
+           {nextActivity.id != null  ? 
+           <>
             <Text style={styles.goalItem}>Name: {nextActivity.name}</Text>
             <Text>Description: {nextActivity.description}</Text>
             <Text>Date: {nextActivity.starttime ? format(new Date(nextActivity.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
             <Text>Time: {nextActivity.starttime ? format(new Date(nextActivity.starttime + 'Z'), 'hh:mm'): null}</Text>
+            </>
+           : <Text style={styles.centerText}>No upcoming activities!</Text>}
             </View>
           </View>
         </View>
@@ -125,14 +134,18 @@ export default function Home({currentUser} : {currentUser: User} ) {
         <Text style ={styles.header2}>Next Game</Text>
           <View style={styles.goalView2}>
             <View>
-              <Text style={styles.goalItem}>
-              HOME TEAM - {teamsList.find(team => team.id === nextGame.hometeamid)?.name}
-              </Text>
-              <Text style={styles.goalItem}>
-              AWAY TEAM  - {teamsList.find(team => team.id === nextGame.awayteamid)?.name}
-              </Text>
-              <Text>Date: {nextGame.starttime ? format(new Date(nextGame.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
-              <Text>Time: {nextGame.starttime ? format(new Date(nextGame.starttime + 'Z'), 'hh:mm') : null}</Text>
+            {nextGame.id ? 
+              <>
+                <Text style={styles.goalItem}>
+                HOME TEAM - {teamsList.find(team => team.id === nextGame.hometeamid)?.name}
+                </Text>
+                <Text style={styles.goalItem}>
+                AWAY TEAM  - {teamsList.find(team => team.id === nextGame.awayteamid)?.name}
+                </Text>
+                <Text>Date: {nextGame.starttime ? format(new Date(nextGame.starttime + 'Z'), 'MM/dd/yyyy') : null}</Text>
+                <Text>Time: {nextGame.starttime ? format(new Date(nextGame.starttime + 'Z'), 'hh:mm') : null}</Text>
+              </>
+           : <Text style={styles.centerText}>No upcoming games!</Text>}
             </View>
           </View>
         </View>
@@ -193,7 +206,7 @@ export default function Home({currentUser} : {currentUser: User} ) {
               /> : <Text style={styles.centerText}>No Games Today</Text>}
             </View>
           </View>
-        </ScrollView>
+        </ScrollView>}
     </View>
   );
 }

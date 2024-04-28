@@ -3,21 +3,36 @@ import { Button, View, StyleSheet } from 'react-native';
 import { createUser } from '../../api/logic/UserLogic';
 import { User } from '../../api/models/User';
 import {useForm, Controller} from 'react-hook-form';
+import { useState } from 'react';
 export default function CreateUserModal({handleModalClose, handleCreateUser} : {handleCreateUser: (success: boolean) => void, handleModalClose: () => void}) {
   const containerStyle = {backgroundColor: 'white', padding: 0};
-  const { control, handleSubmit, formState: { errors } } = useForm<User>();
+  const { control, handleSubmit, setValue, formState: { errors } } = useForm<User>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 	const onSubmit = async (data) => {
-        const user  = {
-          id: 0,
-          username: data.username,
-          password: data.password,
-          firstname: data.firstname,
-          lastname: data.lastname,
-          isCoach: false,
-          TeamId: 0
-        }
-			const success = await createUser(user);
-      handleCreateUser(success);
+    setValue("username", "");
+    setValue("password", "");
+    setValue("firstname", "");
+    setValue("lastname", "");
+      const user  = {
+        id: 0,
+        username: data.username,
+        password: data.password,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        isCoach: false,
+        TeamId: 0
+      }
+      if (isSubmitting)
+      {
+        return;
+      }
+      else
+      {
+        setIsSubmitting(true);
+        const success = await createUser(user);
+        handleCreateUser(success);
+        setIsSubmitting(false);
+      }
       handleModalClose();
 	};
   return (

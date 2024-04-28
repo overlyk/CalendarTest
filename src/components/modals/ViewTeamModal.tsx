@@ -68,7 +68,7 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, curren
                     scrollEnabled={false}
                     renderItem={({ item }) => (
                     <View  style={styles.goalView} > 
-                      <Text style={styles.goalItem}>{item.firstname} {item.lastname}</Text>
+                      <Text style={styles.goalItem}>{item.firstname} {item.lastname} {item.isCoach ? `- Coach`: null}</Text>
                       {currentUser.isCoach ? 
                       <TouchableOpacity style={styles.deleteButton} onPress={() => removePlayer(item.id)}>
                         <Text style={{color: 'white'}}>X</Text>

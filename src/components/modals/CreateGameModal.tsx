@@ -9,20 +9,35 @@ import { Game } from '../../api/models/Game';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Team } from '../../api/models/Team';
+import { useState } from 'react';
 
 export default function CreateGameModal({handleModalClose, fetchTeamGames, teams, isVisible} : {handleModalClose: () => void; fetchTeamGames: () => void; teams: Team[], isVisible: boolean; userId: number}) {
-  const { control, watch, handleSubmit, formState: { errors } } = useForm<Game>();
+  const { control, watch, handleSubmit, setValue, formState: { errors } } = useForm<Game>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const homeTeamId = watch('hometeamid');
   const awayTeamId = watch('awayteamid');
   const onSubmit = async (data) => {
+    setValue("hometeamid", 0);
+    setValue("awayteamid", 0);
+    setValue("starttime", new Date());
+    setValue("endtime", new Date());
     const game = {
-        id: 0,
-        hometeamid: data.hometeamid,
-        awayteamid: data.awayteamid,
-        starttime: data.starttime,
-        endtime: data.endtime
+      id: 0,
+      hometeamid: data.hometeamid,
+      awayteamid: data.awayteamid,
+      starttime: data.starttime,
+      endtime: data.endtime
     }
-    await createGame(game);
+    if (isSubmitting)
+    {
+      return;
+    }
+    else
+    {
+      setIsSubmitting(true);
+      await createGame(game);
+      setIsSubmitting(false);
+    }
     fetchTeamGames();
     handleModalClose();
   };
@@ -195,7 +210,7 @@ const styles = StyleSheet.create({
       padding: 10,
       margin: 10,
       borderRadius: 10,
-      height: 500
+      height: 400
     },
     input: {
       height: 40,

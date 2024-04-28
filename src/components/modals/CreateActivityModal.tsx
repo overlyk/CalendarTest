@@ -7,11 +7,18 @@ import { createActivity, updateActivity } from '../../api/logic/ActivityLogic';
 import { Activity } from '../../api/models/Activity';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { User } from '../../api/models/User';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function CreateActivityModal({handleModalClose, fetchActivities, isVisible, user, activityToEdit} : {handleModalClose: () => void; fetchActivities: () => void; isVisible: boolean; user: User; activityToEdit?: Activity}) {
   const { control, handleSubmit, formState: { errors }, setValue } = useForm<Activity>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = async (data) => {
+    setValue("name", "");
+    setValue("description", "");
+    setValue("location", "");
+    setValue("starttime", new Date());
+    setValue("endtime", new Date());
+    
     const activity = activityToEdit ? {
       id: activityToEdit.id,
       name: data.name,
@@ -40,13 +47,25 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
         teamid: 0,
         location: data.location
       }
-	  activityToEdit ? await updateActivity(activity) : await createActivity(activity);
+      if (isSubmitting)
+      {
+        return;
+      }
+      else
+      {
+        setIsSubmitting(true);
+        if (activityToEdit)
+        {
+          await updateActivity(activity);
+          setIsSubmitting(false);
+        }
+        else
+        {
+          await createActivity(activity);
+          setIsSubmitting(false);
+        }
+      }
     fetchActivities();
-    setValue("name", "");
-    setValue("description", "");
-    setValue("location", "");
-    setValue("starttime", new Date());
-    setValue("endtime", new Date());
     handleModalClose();
   };
 

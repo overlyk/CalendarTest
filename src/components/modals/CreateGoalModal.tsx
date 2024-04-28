@@ -5,27 +5,38 @@ import { Goal } from '../../api/models/Goal';
 import {useForm, Controller} from 'react-hook-form';
 import GreenButton from '../GreenButton';
 import { User } from '../../api/models/User';
+import { useState } from 'react';
 
 export default function CreateGoalModal({handleModalClose, fetchGoals, isVisible, currentUser} : {handleModalClose: () => void; fetchGoals: () => void; isVisible: boolean; currentUser: User}) {
-  const { control, handleSubmit, formState: { errors } } = useForm<Goal>();
+  const { control, handleSubmit, setValue, formState: { errors } } = useForm<Goal>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = async (data) => {
-    const goal = 
-      currentUser.isCoach && currentUser.TeamId ?
-      {
+    setValue("name", "");
+    setValue("description", "");
+    setValue("isCompleted", false);
+    setValue("teamid", currentUser.TeamId ? currentUser.TeamId : 0);
+    const goal = currentUser.isCoach && currentUser.TeamId ? {
         id: 0,
         userid: currentUser.id,
         name: data.name,
         description: data.description,
         isCompleted: false,
         teamid: data.teamid
-      } : 
-      {
+      } : {
         id: 0,
         userid: currentUser.id,
         name: data.name,
         description: data.description,
         isCompleted: false,
         teamid: 0
+      }
+      if (isSubmitting) {
+        return;
+      }
+      else {
+        setIsSubmitting(true);
+        await createGoal(goal);
+        setIsSubmitting(false);
       }
 	  await createGoal(goal);
     fetchGoals();
@@ -84,24 +95,12 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 10,
   },
-  
   input: {
     height: 40,
     borderColor: 'green',
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
-  },
-  submitButton: {
-     backgroundColor: 'green',
-     padding: 10,
-     margin: 15,
-     height: 40,
-  },
-  submitButtonText:{
-     color: 'white',
-     alignContent: 'center',
-     justifyContent: 'center',
   },
   titleText:{
     fontSize: 30,
@@ -110,11 +109,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
   },
-  surface: {
-    padding: 8,
-    height: 80,
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
 });

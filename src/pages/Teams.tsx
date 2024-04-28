@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, View, ActivityIndicator  } from 'react-native';
 import {  useEffect, useState } from 'react'
 import { Text } from 'react-native-paper';
 import { User } from '../api/models/User';
@@ -19,11 +19,16 @@ export default function Teams({currentUser} : {currentUser: User} ) {
   const currentUserTeam = teamsList.find(team => team.id === currentUser.TeamId);
   const [gameModalVisible, setGameModalVisible] = useState(false);
   const [teamModalVisible, setTeamModalVisible] = useState(false);
+  const [isLoadingTeams, setIsLoadingTeams] = useState(true);
+  const [isLoadingGames, setIsLoadingGames] = useState(true);
+  const [isLoadingActivities, setIsLoadingActivities] = useState(true);
+
   const fetchTeams = async () => {
     const allTeams = await getAllTeams();
     if (allTeams) {
       setTeamsList(allTeams);
     }
+    setIsLoadingTeams(false);
   };
   const fetchTeamActivities = async () => {
     const allActivities = await getAllActivities();
@@ -38,6 +43,7 @@ export default function Teams({currentUser} : {currentUser: User} ) {
       });
     setTeamActivities(filteredActivities);
     }
+    setIsLoadingActivities(false);
   };
   const fetchTeamGames = async () => {
     const allGames = await getAllGames();
@@ -52,6 +58,7 @@ export default function Teams({currentUser} : {currentUser: User} ) {
       });
       setTeamGames(filteredGames);
     }
+    setIsLoadingGames(false);
   };
   useEffect(() => {
     fetchTeamActivities();
@@ -61,8 +68,10 @@ export default function Teams({currentUser} : {currentUser: User} ) {
   return (
     <SafeAreaView style={styles.container}>
         {!currentUser.TeamId ?
-          <Text>You currently have no team! Ask a coach to sign you up!</Text>
+          <Text style={styles.centerText}>You currently have no team! Ask a coach to sign you up!</Text>
           : 
+          (isLoadingActivities || isLoadingGames || isLoadingTeams) ? 
+            <ActivityIndicator size="large" color="green"/> :
           <>
             <Text style={styles.header}>{currentUserTeam?.name} Homepage!</Text>
             <GreenButton text="View Team" onPress={() => setTeamModalVisible(!teamModalVisible)}/>
@@ -114,11 +123,11 @@ export default function Teams({currentUser} : {currentUser: User} ) {
                   />
                 </View>
               </View>
-        </ScrollView>
-          </>
-        }
-  </SafeAreaView>
-  );
+             </ScrollView>
+            </> 
+         }
+      </SafeAreaView>
+   );
 }
 
 const styles = StyleSheet.create({
@@ -131,6 +140,9 @@ const styles = StyleSheet.create({
  scrollView: {
   backgroundColor: '#f0f0f0', // Light gray background,
   marginHorizontal: 5,
+  },
+  centerText: {
+    textAlign: 'center',
   },
   header: {
     fontSize: 24,
