@@ -1,4 +1,3 @@
-//this is an example of a modal popup in react native
 import { Modal, Portal, Text, PaperProvider, TextInput } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
@@ -18,7 +17,6 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
     setValue("location", "");
     setValue("starttime", new Date());
     setValue("endtime", new Date());
-    
     const activity = activityToEdit ? {
       id: activityToEdit.id,
       name: data.name,
@@ -47,20 +45,16 @@ export default function CreateActivityModal({handleModalClose, fetchActivities, 
         teamid: 0,
         location: data.location
       }
-      if (isSubmitting)
-      {
+      if (isSubmitting) {
         return;
       }
-      else
-      {
+      else {
         setIsSubmitting(true);
-        if (activityToEdit)
-        {
+        if (activityToEdit) {
           await updateActivity(activity);
           setIsSubmitting(false);
         }
-        else
-        {
+        else {
           await createActivity(activity);
           setIsSubmitting(false);
         }
@@ -188,7 +182,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 500
   },
-  
   input: {
     height: 40,
     borderColor: 'green',

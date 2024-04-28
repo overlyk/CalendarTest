@@ -10,10 +10,8 @@ export default function Login( { handleLogin } : { handleLogin: (user: User) => 
     const [inputPassword, setInputPassword] = useState('');
     const [loginError, setLoginError] = useState('');
     const [toastMessage, setToastMessage] = useState('');
-
-    //function to handle logging in user
     const authenticateUser = async () => {
-      const user = await loginUser(inputUsername, inputPassword); //calls API to see if user exists and authenticated
+      const user = await loginUser(inputUsername, inputPassword);
         if (user) 
         {
             handleLogin(user);
@@ -23,7 +21,6 @@ export default function Login( { handleLogin } : { handleLogin: (user: User) => 
             setLoginError('Invalid username or password');
         }
     };
-
     const handleCreateUser = async (success: boolean) => {
          if (success) {
             setToastMessage('User created successfully');
@@ -36,12 +33,11 @@ export default function Login( { handleLogin } : { handleLogin: (user: User) => 
          }
     }
 
-
     return (
      <View style = {styles.container}>
          {showCreateUserModal ? <CreateUserModal handleCreateUser={handleCreateUser} handleModalClose={() => setCreateUserModal(false)} /> : null}
          <Surface>
-            <Text style ={styles.titleText}>       PHEONIX FITNESS</Text>
+            <Text style ={styles.titleText}>PHEONIX FITNESS</Text>
             {loginError ? <Text style={styles.errorText}>{loginError}</Text> : null}
             {toastMessage ? <Text style={styles.toastText}>{toastMessage}</Text> : null}
             <TextInput style = {styles.input}
@@ -59,19 +55,18 @@ export default function Login( { handleLogin } : { handleLogin: (user: User) => 
             <TouchableOpacity
                style = {styles.submitButton}
                onPress = {authenticateUser}>
-               <Text style = {styles.submitButtonText}>                                        Login </Text>
+               <Text style = {styles.submitButtonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
                style = {styles.submitButton}
                onPress = {() => setCreateUserModal(true)}>
-               <Text style = {styles.submitButtonText}>                                       Sign Up </Text>
+               <Text style = {styles.submitButtonText}>Sign Up</Text>
             </TouchableOpacity>
 
             </Surface>
     </View>
     );
 }
-//use these to style the components (similar to CSS)
 const styles = StyleSheet.create({
     container: {
        paddingTop: 220,
@@ -97,12 +92,14 @@ const styles = StyleSheet.create({
        color: 'white',
        alignContent: 'center',
        justifyContent: 'center',
+       textAlign: 'center',
     },
     titleText:{
       fontSize: 30,
       color: 'green',
       alignContent: 'center',
       justifyContent: 'center',
+      textAlign: 'center',
       },
    surface: {
       padding: 8,

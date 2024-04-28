@@ -38,7 +38,6 @@ export default function CreateGoalModal({handleModalClose, fetchGoals, isVisible
         await createGoal(goal);
         setIsSubmitting(false);
       }
-	  await createGoal(goal);
     fetchGoals();
     handleModalClose();
   };

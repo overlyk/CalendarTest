@@ -9,7 +9,6 @@ import CreateGoalModal from '../components/modals/CreateGoalModal';
 import { getAllTeams } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 
-
 export default function Goals({currentUser} : {currentUser : User}) {
     const [teamGoals, setTeamGoals] = useState<Goal[]>([]);
     const [userGoals, setUserGoals] = useState<Goal[]>([]);
@@ -30,11 +29,9 @@ export default function Goals({currentUser} : {currentUser : User}) {
     const openModal = () => {
       setModalVisible(true);
     };
-
     const closeModal = () => {
       setModalVisible(false);
     };
-
     const fetchGoals = async () => {
       const allGoals = await getAllGoals();
       if (allGoals) {
@@ -45,22 +42,18 @@ export default function Goals({currentUser} : {currentUser : User}) {
         setIsLoadingGoals(false);
       }
     };
-    
     useEffect(() => {
       fetchGoals(); 
       fetchTeams();
     }, []);
-
     const deleteAndRefresh = async (id: number) => {
       await deleteGoal(id);
       fetchGoals();
     }
-
     const toggleCompleted = async (goal: Goal) => {
       await toggleGoalCompletion(goal);
       fetchGoals();
     }
-
     const toggleTeamGoalCompleted = async (goal: Goal) => {
       currentUser.isCoach ? await toggleGoalCompletion(goal) : null;
       fetchGoals();
@@ -68,33 +61,33 @@ export default function Goals({currentUser} : {currentUser : User}) {
 
   return (
     <SafeAreaView style={styles.container2}>
-      <ScrollView>
-        {isLoadingGoals || isLoadingTeams ? <ActivityIndicator size="large" color="green"/> : 
-        <>
+        {isLoadingGoals || isLoadingTeams ? <ActivityIndicator size="large" color="green"/> : null }
         <Text style={styles.bigHeader}>Goals</Text>
         <GreenButton text={currentUser.isCoach ? "Create Team Goal" : "Create Goal"} onPress={openModal}/>
         <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} currentUser={currentUser}></CreateGoalModal>
-
+        <ScrollView>
         {!currentUser.isCoach ? 
           <>
             <Text style={styles.header}>{`${currentUser.firstname}'s Goals`}</Text>
             {userGoals.length > 0 ?
-                <FlatList
+              <FlatList
                 style={{margin: 10}}
                 scrollEnabled={false}
                 data={userGoals}
                 renderItem={({ item }) => (
                   <TouchableOpacity style={styles.goalView} onPress={() => toggleCompleted(item)}>
-                    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <View style={{width: '50%'}}>
                       <Text style={styles.goalItem}>{item.name}</Text>
-                      <Text>{item.description}</Text>
+                      <Text style={styles.goalSubText}>{item.description}</Text>
                     </View>
-                    <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
-                      {item.isCompleted ? 'Complete' : 'In Progress'}
-                    </Text>
-                    <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
-                      <Text style={{color: 'white'}}>X</Text>
-                    </TouchableOpacity>
+                    <View style={{width: '50%', alignItems: 'flex-end' }}>
+                      <Text style={[styles.goalItemRight, { color: item.isCompleted ? 'green' : 'red' }]}>
+                        {item.isCompleted ? 'Complete' : 'In Progress'}
+                      </Text>
+                      <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+                        <Text style={{color: 'white'}}>X</Text>
+                      </TouchableOpacity>
+                    </View>
                   </TouchableOpacity>
                 )}
                 keyExtractor={item => item.id.toString()}
@@ -103,34 +96,34 @@ export default function Goals({currentUser} : {currentUser : User}) {
           : null}
 
         {currentUser.TeamId ?
-        <>
-          <Text style={styles.header}>{`${currentTeam.name}'s Goals`}</Text>
-          {teamGoals.length > 0 ?
-            <FlatList
-              style={{margin: 10}}
-              scrollEnabled={false}
-              data={teamGoals}
-              renderItem={({ item }) => (
+          <>
+            <Text style={styles.header}>{`${currentTeam.name}'s Goals`}</Text>
+            {teamGoals.length > 0 ?
+              <FlatList
+                style={{margin: 10}}
+                scrollEnabled={false}
+                data={teamGoals}
+                renderItem={({ item }) => (
                 <TouchableOpacity style={styles.goalView} onPress={() => toggleTeamGoalCompleted(item)}>
-                  <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <View style={{width: '50%'}}>
                     <Text style={styles.goalItem}>{item.name}</Text>
-                    <Text>{item.description}</Text>
+                    <Text style={styles.goalSubText}>{item.description}</Text>
                   </View>
-                  <Text style={[styles.goalItem, { color: item.isCompleted ? 'green' : 'red' }]}>
-                    {item.isCompleted ? 'Complete' : 'In Progress'}
-                  </Text>
-                  { currentUser.isCoach ? 
-                  <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
-                    <Text style={{color: 'white'}}>X</Text>
-                  </TouchableOpacity> : null }
+                  <View style={{width: '50%', alignItems: 'flex-end' }}>
+                    <Text style={[styles.goalItemRight, { color: item.isCompleted ? 'green' : 'red' }]}>
+                      {item.isCompleted ? 'Complete' : 'In Progress'}
+                    </Text>
+                    { currentUser.isCoach ? 
+                    <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+                      <Text style={{color: 'white'}}>X</Text>
+                    </TouchableOpacity> : null }
+                  </View>
                 </TouchableOpacity>
-              )}
-              keyExtractor={item => item.id.toString()}
-            /> : <Text style={styles.centerText}>Your team hasn't set any goals yet!</Text> }
-          </> : null }
-          </>
-        }
-      </ScrollView>
+                )}
+                keyExtractor={item => item.id.toString()}
+              /> : <Text style={styles.centerText}>Your team hasn't set any goals yet!</Text> }
+            </> : null }
+         </ScrollView>
     </SafeAreaView>
   );
 }
@@ -141,13 +134,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f0f0f0', // Light gray background
+    backgroundColor: '#f0f0f0', 
   },
   container2: {
     paddingTop: 20,
     flex: 10,
     justifyContent: 'space-evenly',
-    backgroundColor: '#f0f0f0', // Light gray background
+    backgroundColor: '#f0f0f0', 
  },
   centerText: {
     textAlign: 'center',
@@ -155,7 +148,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 2,
     color: 'green', 
     textAlign: 'center',
   },
@@ -169,20 +162,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+    padding: 5,
+    marginBottom: 5,
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   goalItem: {
     fontSize: 16,
-    marginHorizontal: 5,
     color: 'green',
+    textAlign: 'left',
+  },
+  goalItemRight: {
+    fontSize: 16,
+    color: 'red',
+    textAlign: 'right',
+  },
+  goalSubText: {
+    fontSize: 12,
+    textAlign: 'left',
   },
   deleteButton: {
     backgroundColor: 'red',
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',

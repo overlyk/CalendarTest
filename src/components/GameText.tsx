@@ -8,7 +8,6 @@ import { getTeam } from '../api/logic/TeamLogic';
 export default function GameText({ game } : { game: Game }) {
   const [homeTeam, setHomeTeam] = useState("");
   const [awayTeam, setAwayTeam] = useState("");
-
   useEffect(() => {
     const fetchHomeTeam = async () => {
       const hometeam = await getTeam(game.hometeamid);

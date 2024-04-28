@@ -22,12 +22,10 @@ export default function CreateUserModal({handleModalClose, handleCreateUser} : {
         isCoach: false,
         TeamId: 0
       }
-      if (isSubmitting)
-      {
+      if (isSubmitting) {
         return;
       }
-      else
-      {
+      else {
         setIsSubmitting(true);
         const success = await createUser(user);
         handleCreateUser(success);

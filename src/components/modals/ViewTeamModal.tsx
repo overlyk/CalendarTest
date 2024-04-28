@@ -58,7 +58,7 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, curren
     <View>
       <Portal>
         <Modal visible={isVisible} contentContainerStyle={styles.container}>
-          <View>
+          <View style={{maxHeight: 480}}>
             <ScrollView>
               <View>
                 <Text style={styles.header}>{`${team.name}'s Players!`}</Text>

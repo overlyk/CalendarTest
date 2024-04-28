@@ -1,11 +1,11 @@
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, View, ActivityIndicator  } from 'react-native';
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, View, ActivityIndicator, TouchableOpacity  } from 'react-native';
 import {  useEffect, useState } from 'react'
 import { Text } from 'react-native-paper';
 import { User } from '../api/models/User';
 import { Game } from '../api/models/Game';
 import { Activity } from '../api/models/Activity';
 import { getAllActivities } from '../api/logic/ActivityLogic';
-import { getAllGames } from '../api/logic/GameLogic';
+import { deleteGame, getAllGames } from '../api/logic/GameLogic';
 import { getAllTeams, getTeam } from '../api/logic/TeamLogic';
 import { Team } from '../api/models/Team';
 import GreenButton from '../components/GreenButton';
@@ -65,6 +65,10 @@ export default function Teams({currentUser} : {currentUser: User} ) {
     fetchTeamGames();
     fetchTeams();
   }, [])
+  const deleteAndRefresh = async (id: number) => {
+    await deleteGame(id);
+    fetchTeamGames();
+  }
   return (
     <SafeAreaView style={styles.container}>
         {!currentUser.TeamId ?
@@ -88,7 +92,7 @@ export default function Teams({currentUser} : {currentUser: User} ) {
                     scrollEnabled={false}
                     renderItem={({ item }) => (
                       <View style={styles.goalView}>
-                        <View>
+                        <View style={{width: '80%'}}>
                           <Text style={styles.goalItem}>{item.name}</Text>
                           <Text>{item.description}</Text>
                           <Text>Date: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
@@ -117,6 +121,12 @@ export default function Teams({currentUser} : {currentUser: User} ) {
                           <Text>Date: {format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy')}</Text>
                           <Text>Time: {format(new Date(item.starttime + 'Z'), 'hh:mm')}</Text>
                         </View>
+                        <View style={{width: '20%', alignItems: 'flex-end' }}>
+                          {currentUser.isCoach ? 
+                            <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+                             <Text style={{color: 'white'}}>X</Text>
+                            </TouchableOpacity> : null }
+                         </View>
                       </View>
                     )}
                     keyExtractor={item => item.id.toString()}
@@ -135,44 +145,51 @@ const styles = StyleSheet.create({
      paddingTop: 20,
      flex: 10,
      justifyContent: 'space-evenly',
-     backgroundColor: '#f0f0f0', // Light gray background
+     backgroundColor: '#f0f0f0', 
   },
- scrollView: {
-  backgroundColor: '#f0f0f0', // Light gray background,
-  marginHorizontal: 5,
-  },
-  centerText: {
-    textAlign: 'center',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'green', // Green header text color
-    textAlign: 'center',
-  },
-  goalView: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  goalItem: {
-    fontSize: 16,
+  scrollView: {
+    backgroundColor: '#f0f0f0', 
     marginHorizontal: 5,
-    color: 'green',
-  },
-  button: {
-    backgroundColor: 'green',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 6,
-    elevation: 3, // for Android shadow
-    shadowColor: '#000', // for iOS shadow
-    shadowOffset: { width: 0, height: 2 }, // for iOS shadow
-    shadowOpacity: 0.2, // for iOS shadow
-    shadowRadius: 2, // for iOS shadow
-  },
+    },
+    centerText: {
+      textAlign: 'center',
+    },
+    deleteButton: {
+      backgroundColor: 'red',
+      width: 25,
+      height: 25,
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    header: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: 'green', 
+      textAlign: 'center',
+    },
+    goalView: {
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 5,
+      padding: 5,
+      marginBottom: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    goalItem: {
+      fontSize: 16,
+      color: 'green',
+    },
+    button: {
+      backgroundColor: 'green',
+      paddingVertical: 12,
+      paddingHorizontal: 24,
+      borderRadius: 6,
+      elevation: 3, // for Android shadow
+      shadowColor: '#000', // for iOS shadow
+      shadowOffset: { width: 0, height: 2 }, // for iOS shadow
+      shadowOpacity: 0.2, // for iOS shadow
+      shadowRadius: 2, // for iOS shadow
+    },
 });

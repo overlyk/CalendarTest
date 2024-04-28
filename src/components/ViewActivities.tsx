@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 export default function ViewActivities({refetchActivities, activities, currentUser, currentTeam} : {refetchActivities: () => void; activities: Activity[]; currentUser: User; currentTeam: Team | undefined}) {
   const [userActivities, setUserActivities] = useState(activities.filter(x => x.teamid === 0));
   const [teamActivities, setTeamActivities]= useState(activities.filter(x => x.teamid === currentUser.TeamId));
-  
   const deleteAndRefresh = async (id: number) => {
     await deleteActivity(id);
     refetchActivities();
@@ -31,17 +30,19 @@ export default function ViewActivities({refetchActivities, activities, currentUs
               data={teamActivities}
               renderItem={({ item }) => (
                 <View style={styles.goalView}>
-                  <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <View style={{width: '50%'}}>
                     <Text style={styles.goalItem}>{item.name}</Text>
                     <Text>{item.description}</Text>
                     <Text>Start: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
                     <Text>End: {item.endtime ? format(new Date(item.endtime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
                   </View>
+                  <View style={{width: '50%', alignItems: 'flex-end' }}>
                   {currentUser.isCoach ?
                     <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
                       <Text style={{color: 'white'}}>X</Text>
                     </TouchableOpacity>
                     : null }
+                  </View>
                 </View>
               )}
               keyExtractor={item => item.id.toString()}
@@ -56,15 +57,17 @@ export default function ViewActivities({refetchActivities, activities, currentUs
             data={userActivities}
             renderItem={({ item }) => (
               <View style={styles.goalView}>
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <View style={{width: '50%'}}>
                   <Text style={styles.goalItem}>{item.name}</Text>
                   <Text>{item.description}</Text>
                   <Text>Start: {item.starttime ? format(new Date(item.starttime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
                   <Text>End: {item.endtime ? format(new Date(item.endtime + 'Z'), 'MM/dd/yyyy') : 'N/A'}</Text>
                 </View>
-                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
-                  <Text style={{color: 'white'}}>X</Text>
-                </TouchableOpacity>
+                <View style={{width: '50%', alignItems: 'flex-end' }}>
+                  <TouchableOpacity style={styles.deleteButton} onPress={() => deleteAndRefresh(item.id)}>
+                    <Text style={{color: 'white'}}>X</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
             keyExtractor={item => item.id.toString()}
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 2,
     color: 'green',
     textAlign: 'center',
   },
@@ -89,14 +92,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+    padding: 5,
+    marginBottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    textAlign: 'left',
   },
   goalItem: {
     fontSize: 16,
-    marginHorizontal: 5,
     color: 'green', 
   },
   deleteButton: {

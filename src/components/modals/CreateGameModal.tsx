@@ -1,4 +1,3 @@
-//this is an example of a modal popup in react native
 import { Modal, Portal, Text } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
@@ -28,12 +27,10 @@ export default function CreateGameModal({handleModalClose, fetchTeamGames, teams
       starttime: data.starttime,
       endtime: data.endtime
     }
-    if (isSubmitting)
-    {
+    if (isSubmitting) {
       return;
     }
-    else
-    {
+    else {
       setIsSubmitting(true);
       await createGame(game);
       setIsSubmitting(false);

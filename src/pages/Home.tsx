@@ -216,11 +216,10 @@ const styles = StyleSheet.create({
      paddingTop: 20,
      flex: 10,
      justifyContent: 'space-evenly',
-     backgroundColor: '#f0f0f0', // Light gray background
+     backgroundColor: '#f0f0f0', 
   },
   goalItem: {
     fontSize: 16,
-    marginHorizontal: 5,
     color: 'green', 
   },
   goalView: {
@@ -260,7 +259,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   },
   scrollView: {
-    backgroundColor: '#f0f0f0', // Light gray background
+    backgroundColor: '#f0f0f0',
     marginHorizontal: 5,
   },
   centerText:{

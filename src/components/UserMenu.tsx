@@ -8,7 +8,6 @@ export default function UserMenu({handleLogout} : {handleLogout: () => void}) {
     const closeMenu = () => setVisible(false);
     const openMenu = () => setVisible(true);
 
-
     return (
       <Menu
         visible={visible}

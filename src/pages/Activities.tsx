@@ -16,7 +16,6 @@ export default function Activities({currentUser} : {currentUser: User} ) {
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [isLoadingActivities, setIsLoadingActivities] = useState(true);
   const [isLoadingTeams, setIsLoadingTeams] = useState(true);
-
   const currentUserTeam = teamsList.find(team => team.id === currentUser.TeamId);
   const fetchTeams = async () => {
     const allTeams = await getAllTeams();
@@ -40,12 +39,14 @@ export default function Activities({currentUser} : {currentUser: User} ) {
   return (
     <View style={styles.container}>
       {isLoadingActivities || isLoadingTeams ? <ActivityIndicator size="large" color="green"/> :
-      <ScrollView style={styles.scrollView}>
-          <Text style={styles.header}>Activities</Text>
-          <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setCreateModalVisible(true)}/>
+      <>
+        <Text style={styles.header}>Activities</Text>
+        <GreenButton text={currentUser.isCoach ? "Create Team Activity" : "Create Activity"} onPress={() => setCreateModalVisible(true)}/>
+        <ScrollView style={styles.scrollView}>
           <CreateActivityModal handleModalClose={() => setCreateModalVisible(false)} fetchActivities={fetchActivities} isVisible={createModalVisible} user={currentUser}/>
           <ViewAllActivitiesModal refetchActivities={fetchActivities} activities={userActivities} currentUser={currentUser} currentTeam={currentUserTeam}/>
-      </ScrollView>
+        </ScrollView>
+      </>
       }
     </View>
   );
