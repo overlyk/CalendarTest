@@ -23,11 +23,12 @@ export default function ViewActivities({refetchActivities, activities, currentUs
     <View>
         {currentUser.TeamId ? 
         <>
-        <Text style={styles.header}>{currentUser.TeamId ? `${currentTeam?.name}'s Activities` : null}</Text>
+        <Text style={styles.header}>{currentUser.TeamId ? `${currentTeam?.name} Activities` : null}</Text>
         {teamActivities.length > 0 ?
             <FlatList
               style={{margin: 10}}
               data={teamActivities}
+              scrollEnabled={false}
               renderItem={({ item }) => (
                 <View style={styles.goalView}>
                   <View style={{width: '50%'}}>
@@ -55,6 +56,7 @@ export default function ViewActivities({refetchActivities, activities, currentUs
           <FlatList
             style={{margin: 10}}
             data={userActivities}
+            scrollEnabled={false}
             renderItem={({ item }) => (
               <View style={styles.goalView}>
                 <View style={{width: '50%'}}>

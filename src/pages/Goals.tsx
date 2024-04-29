@@ -16,6 +16,7 @@ export default function Goals({currentUser} : {currentUser : User}) {
     const [currentTeam, setCurrentTeam] = useState({} as Team)
     const [isLoadingTeams, setIsLoadingTeams] = useState(true);
     const [isLoadingGoals, setIsLoadingGoals] = useState(true);
+
     const fetchTeams = async () => {
       const allTeams = await getAllTeams();
       if (allTeams) {
@@ -61,7 +62,8 @@ export default function Goals({currentUser} : {currentUser : User}) {
 
   return (
     <SafeAreaView style={styles.container2}>
-        {isLoadingGoals || isLoadingTeams ? <ActivityIndicator size="large" color="green"/> : null }
+        {isLoadingGoals || isLoadingTeams ? <ActivityIndicator size="large" color="green"/> : 
+        <>
         <Text style={styles.bigHeader}>Goals</Text>
         <GreenButton text={currentUser.isCoach ? "Create Team Goal" : "Create Goal"} onPress={openModal}/>
         <CreateGoalModal handleModalClose={closeModal} fetchGoals={fetchGoals} isVisible={modalVisible} currentUser={currentUser}></CreateGoalModal>
@@ -122,8 +124,9 @@ export default function Goals({currentUser} : {currentUser : User}) {
                 )}
                 keyExtractor={item => item.id.toString()}
               /> : <Text style={styles.centerText}>Your team hasn't set any goals yet!</Text> }
-            </> : null }
+            </> : null } 
          </ScrollView>
+         </> }
     </SafeAreaView>
   );
 }

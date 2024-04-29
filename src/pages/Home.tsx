@@ -42,7 +42,7 @@ export default function Home({currentUser} : {currentUser: User} ) {
       const allActivities = await getAllActivities();
       if (allActivities) {
         const filteredActivities = allActivities
-        .filter(activity => activity.userid === currentUser.id || activity.teamid === currentUser.TeamId)
+        .filter(activity => activity.userid === currentUser.id || (activity.teamid === currentUser.TeamId && activity.teamid != 0))
         .sort((a, b) => {
           // Convert start times to Date objects and subtract to get a numeric difference
           const startTimeA = new Date(a.starttime).getTime();
@@ -53,7 +53,7 @@ export default function Home({currentUser} : {currentUser: User} ) {
           setUserActivities(filteredActivities);
           const activityDays = filteredActivities.map(activity => format(new Date(activity.starttime), 'yyyy-MM-dd'));
           setActivityDayList(activityDays);
-          setNextActivity(filteredActivities.filter(activity => format(new Date(activity.starttime), 'yyyy-MM-dd') >= format(new Date(), 'yyyy-MM-dd'))[0]);
+          setNextActivity(filteredActivities.filter(activity => format(new Date(activity.starttime), 'yyyy-MM-dd') >= format(new Date(), 'yyyy-MM-dd')).length > 0 ? filteredActivities.filter(activity => format(new Date(activity.starttime), 'yyyy-MM-dd') >= format(new Date(), 'yyyy-MM-dd'))[0] : {} as Activity);
       }
       }
       setIsLoadingActivities(false);
@@ -74,7 +74,7 @@ export default function Home({currentUser} : {currentUser: User} ) {
           setUserGames(filteredGames);
           const gameDays = filteredGames.map(game => format(new Date(game.starttime), 'yyyy-MM-dd'));
           setGameDayList(gameDays);
-          setNextGame(filteredGames.filter(game => format(new Date(game.starttime), 'yyyy-MM-dd') >= format(new Date(), 'yyyy-MM-dd'))[0]);
+          setNextGame(filteredGames.filter(game => format(new Date(game.starttime), 'yyyy-MM-dd') >= format(new Date(), 'yyyy-MM-dd')) ? filteredGames.filter(game => format(new Date(game.starttime), 'yyyy-MM-dd') >= format(new Date(), 'yyyy-MM-dd'))[0] : {} as Game);
         }
 
       }

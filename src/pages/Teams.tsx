@@ -34,7 +34,7 @@ export default function Teams({currentUser} : {currentUser: User} ) {
     const allActivities = await getAllActivities();
     if (allActivities) {
       const filteredActivities = allActivities
-      .filter(activity => activity.teamid === currentUser.TeamId  && new Date(activity.starttime) > new Date())
+      .filter(activity => activity.teamid === currentUser.TeamId  && activity.teamid != 0 && new Date(activity.starttime) > new Date())
       .sort((a, b) => {
         // Convert start times to Date objects and subtract to get a numeric difference
         const startTimeA = new Date(a.starttime).getTime();
@@ -84,7 +84,7 @@ export default function Teams({currentUser} : {currentUser: User} ) {
             {currentUserTeam ? <ViewTeamModal handleModalClose={() => setTeamModalVisible(!teamModalVisible)} team={currentUserTeam} isVisible={teamModalVisible} currentUser={currentUser}></ViewTeamModal> : null}
             <ScrollView>
               <View>
-                <Text style={styles.header}>Team Activities Coming Up!</Text>
+                <Text style={styles.header}>Team Activities Up Next!</Text>
                 <View>
                   <FlatList
                     style={{margin: 10}}

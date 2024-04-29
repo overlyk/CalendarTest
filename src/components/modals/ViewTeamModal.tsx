@@ -13,6 +13,7 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, curren
     const [players, setPlayers] = useState<User[]>([]);
     const [allUnassignedUsers, setAllUnassignedUsers] = useState<User[]>([]);
     const { control, handleSubmit, setValue, formState: { errors } } = useForm<User>();
+   
     const onSubmit = async (data) => {
       const user = {
         id: data.id,
@@ -82,7 +83,7 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, curren
             {currentUser.isCoach ? 
             <>
             <Controller
-                  name="TeamId"
+                  name="id"
                   control={control}
                   rules={{
                     required: true,
@@ -115,7 +116,7 @@ export default function ViewTeamModal({handleModalClose, team, isVisible, curren
                   />
                 )}
                 />
-                {errors.TeamId && <Text>Select a player to add them</Text>}
+                {errors.id && <Text>Select a player to add them</Text>}
                 <GreenButton onPress={handleSubmit(onSubmit)} text="Add Player"/>
                 </> : null}
             <GreenButton onPress={handleModalClose} text="Back"/>
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   dropdownButtonStyle: {
-    width: 350,
+    width: '100%',
     height: 50,
     backgroundColor: '#E9ECEF',
     borderRadius: 12,
